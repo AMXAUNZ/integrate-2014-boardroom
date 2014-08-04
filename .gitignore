@@ -1,0 +1,26 @@
+# Compiled source #
+###################
+*.tkn
+*.src
+src/amx-au-gc-boardroom-main.tko
+
+# Documents #
+###################
+*.pdf
+*.doc
+
+# Image Files #
+###################
+*.ai
+*.bmp
+*.jpg
+*.jpeg
+*.png
+
+# Code Files in lib/amx-rms-sdk#
+###################
+lib/amx-rms-sdk/*.jar
+lib/amx-rms-sdk/*/*.axi
+lib/amx-rms-sdk/*/*.axs
+lib/amx-rms-sdk/*/*.tkn
+lib/amx-rms-sdk/*/*.tko
