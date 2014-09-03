@@ -54,7 +54,6 @@ channel_event[vdvRms,0]
 				moderoSetPage (dvTpSchedulingMain, pageWelcomePanelRmsConnected)
 				wait 30	// wait 3 seconds (just so we see the "connected" message for more than a split second)
 				{
-					//moderoSetPage (dvTpSchedulingMain, pageWelcomePanelLocked)
 					lockWelcomePanel ()
 				}
 			}
@@ -93,14 +92,7 @@ data_event[dvTpSchedulingRms]
 		moderoDisableAllPopups (dvTpSchedulingMain)
 		if ([vdvRms,RMS_CHANNEL_CLIENT_ONLINE])
 		{
-			//moderoSetPage (dvTpSchedulingMain, pageWelcomePanelLocked)
 			lockWelcomePanel ()
-			/*if (rmsSchedule.bookingIdCurrentMeeting == '')
-			{
-				moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNow, pageWelcomePanelUnlocked)
-			}
-			else
-				moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)*/
 			
 			if (rmsSchedule.bookingIdCurrentMeeting != '')
 				showCurrentMeetingInfoCardOnWelcomePanel ()
@@ -217,10 +209,7 @@ data_event [vdvDragAndDropTpTable]
 		// Define drag/drop items - they will automatically be enabled by the module
 		addDragItemsAll (vdvDragAndDropTpTable)
 		addDropAreasAll (vdvDragAndDropTpTable)
-		
-		//if (getSystemMode() != SYSTEM_MODE_PRESENTATION)
-		//	disableDropAreasAll (vdvDragAndDrop19)
-    }
+	}
     string:
     {
 		stack_var char header[50]
@@ -591,29 +580,7 @@ button_event[dvTpTableLighting,0]
 			case BTN_LIGHTING_PRESET_ALL_ON:     lightsEnablePresetAllOn()
 			case BTN_LIGHTING_PRESET_ALL_DIM:    lightsEnablePresetAllDim()
 			case BTN_LIGHTING_PRESET_VC_MODE:    lightsEnablePresetVc()
-
-			//case BTN_LIGHTING_AREA_WHITEBOARD_OFF:   lightsOff (LIGHT_ADDRESS_DOWN_LIGHTS_WHITEBOARD)
-			//case BTN_LIGHTING_AREA_WHITEBOARD_ON:    lightsOn (LIGHT_ADDRESS_DOWN_LIGHTS_WHITEBOARD)
-
-			//case BTN_LIGHTING_AREA_FRONT_UP:             lightsEnableRampUp (LIGHT_ADDRESS_DOWN_LIGHTS_FRONT_WALL)
-			//case BTN_LIGHTING_AREA_FRONT_DN:             lightsEnableRampDown (LIGHT_ADDRESS_DOWN_LIGHTS_FRONT_WALL)
-			//case BTN_LIGHTING_AREA_SIDE_AND_BACK_UP:     lightsEnableRampUp (LIGHT_ADDRESS_DOWN_LIGHTS_SIDE_AND_BACK_WALLS)
-			//case BTN_LIGHTING_AREA_SIDE_AND_BACK_DN:     lightsEnableRampDown (LIGHT_ADDRESS_DOWN_LIGHTS_SIDE_AND_BACK_WALLS)
-			//case BTN_LIGHTING_AREA_TABLE_UP:             lightsEnableRampUp (LIGHT_ADDRESS_DOWN_LIGHTS_DESK)
-			//case BTN_LIGHTING_AREA_TABLE_DN:             lightsEnableRampDown (LIGHT_ADDRESS_DOWN_LIGHTS_DESK)
 		}
-	}
-	release:
-	{
-		/*switch (button.input.channel)
-		{
-			case BTN_LIGHTING_AREA_FRONT_UP:             lightsDisableRamp (LIGHT_ADDRESS_DOWN_LIGHTS_FRONT_WALL)
-			case BTN_LIGHTING_AREA_FRONT_DN:             lightsDisableRamp (LIGHT_ADDRESS_DOWN_LIGHTS_FRONT_WALL)
-			case BTN_LIGHTING_AREA_SIDE_AND_BACK_UP:     lightsDisableRamp (LIGHT_ADDRESS_DOWN_LIGHTS_SIDE_AND_BACK_WALLS)
-			case BTN_LIGHTING_AREA_SIDE_AND_BACK_DN:     lightsDisableRamp (LIGHT_ADDRESS_DOWN_LIGHTS_SIDE_AND_BACK_WALLS)
-			case BTN_LIGHTING_AREA_TABLE_UP:             lightsDisableRamp (LIGHT_ADDRESS_DOWN_LIGHTS_DESK)
-			case BTN_LIGHTING_AREA_TABLE_DN:             lightsDisableRamp (LIGHT_ADDRESS_DOWN_LIGHTS_DESK)
-		}*/
 	}
 }
 
@@ -639,7 +606,6 @@ button_event[dvTpTablePower,0]
 			}
 
 			case BTN_POWER_TOGGLE_PC:        pduToggleRelayPower (dvPduOutletPc)
-			//case BTN_POWER_TOGGLE_DVX:     pduToggleRelayPower (dvPduOutletDvx)    // don't allow user to turn power off to DVX
 			case BTN_POWER_TOGGLE_FAN_1:     pduToggleRelayPower (dvPduOutletFan1)
 			case BTN_POWER_TOGGLE_FAN_2:     pduToggleRelayPower (dvPduOutletFan2)
 
@@ -675,10 +641,6 @@ button_event[dvTpTableEnzo,0]
 			case BTN_ENZO_PAGE_UP:					enzoPageUp (dvEnzo)
 			case BTN_ENZO_PREVIOUS:					enzoPrevious(dvEnzo)
 			case BTN_ENZO_NEXT:						enzoNext (dvEnzo)
-			/*case BTN_ENZO_CLOSE_OPEN_APP:
-			case BTN_ENZO_LAUNCH_APP_WEB_BROWSER:	
-			case BTN_ENZO_LAUNCH_APP_DROPBOX:		
-			case BTN_ENZO_LAUNCH_APP_MIRROR_OP:	*/	
 		}
 	}
 }
@@ -837,7 +799,7 @@ button_event[dvTpTableDebug,0]
 			}
 			case BTN_DEBUG_WAKE_ON_LAN_PC:
 			{
-				wakeOnLan (MAC_ADDRESS_PC)
+				//wakeOnLan (MAC_ADDRESS_PC)
 			}
 		}
 	}
@@ -857,8 +819,6 @@ button_event[dvTpTableMain, 0]
 
 			case BTN_MAIN_SPLASH_SCREEN:
 			{
-				//startMultiPreviewSnapshots ()
-
 				// page flips done on the panel
 			}
 		}
@@ -937,14 +897,6 @@ data_event[dvTpTableMain]
 {
 	string:
 	{
-		// start taking snapshots of each input as soon as the video preview popup closes
-		/*if (find_string(data.text, '@PPF-popup-video-preview',1) == 1)
-		{
-			// turn off the video being previewed flag
-			isVideoBeingPreviewed = FALSE
-			startMultiPreviewSnapshots ()
-		}*/
-		
 		if ( (find_string(data.text, '@PPF-',1) == 1) or
 			 (find_string(data.text, 'PPOF-',1) == 1) )
 		{
@@ -1127,9 +1079,6 @@ button_event[dvTpSchedulingRmsCustom,BTN_SCHEDULING_MAKE_RESERVATION]
 		// book a meeting using the RMS Gui
 		sendCommand (vdvRmsGui, "'CREATE.MEETING.REQUEST.SUBJECT-',debugDevToString(dvTpSchedulingMain),',',adHocBookingSubjectHeader,currentUserSchedulingPanel.name")
 		sendCommand (vdvRmsGui, "'CREATE.MEETING.REQUEST.MESSAGE-',debugDevToString(dvTpSchedulingMain),',',adHocBookingDescriptionHeader,currentUserSchedulingPanel.name")
-		
-		//CREATE.MEETING.REQUEST.SUBJECT-10002:1:1,The Subject
-		//CREATE.MEETING.REQUEST.MESSAGE-10002:1:1,The Description
 	}
 }
 

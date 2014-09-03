@@ -29,8 +29,6 @@ initArea (dropAreasTpTable[dvDvxVidOutMultiPreview.port], 771, 164, 379, 180)
 
 initArea (dragAreasTpTable[dvDvxVidInEnzo.port], 658, 376, 134, 105)
 initArea (dragAreasTpTable[dvDvxVidInAppleTv.port], 815, 376, 134, 105)
-//initArea (dragAreasTpTable[dvDvxVidInTx1.port], 820, 376 ,134, 105)
-//initArea (dragAreasTpTable[dvDvxVidInTx2.port], 966, 376, 134, 105)
 initArea (dragAreasTpTable[dvDvxVidInTx3.port], 972,376, 134, 105)
 initArea (dragAreasTpTable[dvDvxVidInTx4.port], 1129,376, 134, 105)
 
@@ -49,9 +47,6 @@ initArea (dragAreasTpTable[dvDvxVidInTx4.port], 1129,376, 134, 105)
 
 // rebuild the event table after setting the variable device and channel code array values
 //rebuild_event()   // not needed unless assigning values to dev or dev array variables during runtime
-
-
-
 
 
 #end_if

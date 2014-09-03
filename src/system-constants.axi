@@ -427,27 +427,6 @@ integer IO_OCCUPANCY_SENSOR = 1
 
 char cLightAddressBoardroom[]		= '00:38:00'
 
-/*char LIGHT_ADDRESS_DOWN_LIGHTS_WHITEBOARD[]             = '255:1:1'
-char LIGHT_ADDRESS_DOWN_LIGHTS_DESK[]                   = '255:1:2'
-char LIGHT_ADDRESS_DOWN_LIGHTS_FRONT_WALL[]             = '255:1:3'
-char LIGHT_ADDRESS_DOWN_LIGHTS_SIDE_AND_BACK_WALLS[]    = '255:1:4'
-char LIGHT_ADDRESS_FLUROS_FRONT_RIGHT[]                 = '255:1:5'
-char LIGHT_ADDRESS_FLUROS_FRONT_MIDDLE[]                = '255:1:6'
-char LIGHT_ADDRESS_FLUROS_FRONT_LEFT[]                  = '255:1:8'
-char LIGHT_ADDRESS_FLUROS_BACK_RIGHT[]                  = '255:1:9'
-char LIGHT_ADDRESS_FLUROS_BACK_MIDDLE[]                 = '255:1:7'
-char LIGHT_ADDRESS_FLUROS_BACK_LEFT[]                   = '255:1:10'
-char LIGHT_ADDRESS_FLUROS_POWER[]                       = '255:1:5'
-
-char DYNALITE_PROTOCOL_RECALL_PRESET_ALL_ON[]       = {$1C,$01,$64,$00,$00,$00,$FF}
-char DYNALITE_PROTOCOL_RECALL_PRESET_AV_MODE[]      = {$1C,$01,$64,$01,$00,$00,$FF}
-char DYNALITE_PROTOCOL_RECALL_PRESET_ALL_DIM[]      = {$1C,$01,$64,$02,$00,$00,$FF}
-char DYNALITE_PROTOCOL_RECALL_PRESET_ALL_OFF[]      = {$1C,$01,$64,$03,$00,$00,$FF}
-char DYNALITE_PROTOCOL_RECALL_PRESET_VC_MODE_1[]    = {$1C,$01,$64,$0A,$00,$00,$FF}
-char DYNALITE_PROTOCOL_RECALL_PRESET_VC_MODE_2[]    = {$1C,$01,$64,$0B,$00,$00,$FF}
-char DYNALITE_PROTOCOL_RECALL_PRESET_VC_MODE_3[]    = {$1C,$01,$64,$0C,$00,$00,$FF}
-char DYNALITE_PROTOCOL_RECALL_PRESET_VC_MODE_4[]    = {$1C,$01,$64,$0D,$00,$00,$FF}*/
-
 
 /*
  * --------------------
@@ -573,27 +552,6 @@ char USER_NAME_MAINTENANCE[] = 'Maintenance'
  * --------------------
  */
 
-//long TIMELINE_ID_MULTI_PREVIEW_SNAPSHOTS    = 1
-
-
-/*
- * --------------------
- * Camera Presets
- * --------------------
- */
-
-integer CAMERA_PRESET_1 = 1
-integer CAMERA_PRESET_2 = 2
-integer CAMERA_PRESET_3 = 3
-
-
-/*
- * --------------------
- * Other useful constants
- * --------------------
- */
-
-char MAC_ADDRESS_PC[]   = {$EC,$A8,$6B,$F8,$73,$53}
 
 /*
  * --------------------

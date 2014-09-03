@@ -174,23 +174,6 @@ define_function moderoNotifyTouchCoordinatesPress (dev panel, integer nX, intege
 		processUserInteractionWelcomePanel ()
 }
 
-
-/*
-#define INCLUDE_MODERO_NOTIFY_TOUCH_COORDINATES_MOVE
-// Note: This will get triggered BEFORE a push event handler in a button_event
-// Note: If push/release coordinate reporting is enabled a movement in user touch anywhere on the panel will trigger this function
-define_function moderoNotifyTouchCoordinatesMove (dev panel, integer nX, integer nY)
-{
-	// panel is the touch panel
-	// nX is the X coordinate
-	// nY is the Y Coordinate
-	
-	if (panel == dvTpSchedulingMain)
-		processUserInteractionWelcomePanel ()
-}
-*/
-
-
 #define INCLUDE_MODERO_NOTIFY_TOUCH_COORDINATES_RELEASE
 // Note: This will get triggered AFTER a release event handler in a button_event
 // Note: If push/release coordinate reporting is enabled a release anywhere on the panel will trigger this function
@@ -335,54 +318,6 @@ define_function unlockWelcomePanel (_user user)
 	moderoSetButtonText (dvTpSchedulingRmsCustom,BTN_ADR_SCHEDULING_USER_WELCOME_MESSAGE,MODERO_BUTTON_STATE_ALL,"'Welcome ',currentUserSchedulingPanel.name")
 	moderoEnablePopupOnPage (dvTpSchedulingMain, popupWelcomeUserMessage, pageWelcomePanelUnlocked)
 	moderoSetResourceFileName (dvTpSchedulingRmsCustom,dynamicResourceUserPhoto,currentUserSchedulingPanel.photo)
-	
-	/*if (rmsSchedule.bookingIdCurrentMeeting == '')	// not in a meeting currently
-	{
-		if (rmsSchedule.bookingIdNextMeeting == '')	// no meetings to come
-		{
-			moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNow, pageWelcomePanelUnlocked)
-		}
-		else
-		{
-			// if there's not enough time remaining to squeeze in a meeting before the next scheduled meeting
-			if (rmsSchedule.nextMeetingMinutesUntilStart <= bookingTime)
-			{
-				moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_BOOKING_MSG, MODERO_BUTTON_STATE_ALL, "'Next meeting will begin in ',getFuzzyTimeString (rmsSchedule.nextMeetingMinutesUntilStart)")
-				
-				moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookNow, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-				moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookingSuccessful, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-			}
-			else	// there's still enough time to squeeze in another meeting
-			{
-				moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNow, pageWelcomePanelUnlocked)
-			}
-		}
-	}
-	else	// currently in a meeting
-	{
-		if (rmsSchedule.bookingIdNextMeeting == '')	// no meetings to come
-		{
-			moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_NEXT_MEETING_START_TIME, MODERO_BUTTON_STATE_ALL, getTimeString12HourFormatAmPm(rmsSchedule.currentMeetingEndTime))
-			moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)
-		}
-		else
-		{
-			// if there's not enough time remaining between the current meetings' finish time and the already next booked meeting to squeeze
-			// in a meeting immediately following the current meeting
-			if (rmsSchedule.nextMeetingMinutesUntilStart <= (rmsSchedule.currentMeetingRemainingMinutes + bookingTime))
-			{
-				moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_BOOKING_MSG, MODERO_BUTTON_STATE_ALL, "'Room in use and next session booked'")
-				
-				moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-				moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookingSuccessful, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-			}
-			else	// there's still enough time to squeeze in another meeting
-			{
-				moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_NEXT_MEETING_START_TIME, MODERO_BUTTON_STATE_ALL, getTimeString12HourFormatAmPm(rmsSchedule.currentMeetingEndTime))
-				moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)
-			}
-		}
-	}*/
 	
 	updateSchedulingPanelToShowCorrectBookingOption ()
 	
@@ -712,18 +647,6 @@ define_function long getDateTimeEncoding (char paramShortDate[8], char paramTime
 	encoding = encoding << 6
 	encoding = encoding & iSecond
 	
-	/*encoding = date_to_year(paramShortDate)
-	encoding = encoding << 4
-	encoding = encoding & date_to_month(paramShortDate)
-	encoding = encoding << 5
-	encoding = encoding & date_to_day(paramShortDate)
-	encoding = encoding << 5
-	encoding = encoding & time_to_hour(paramTime)
-	encoding = encoding << 6
-	encoding = encoding & time_to_minute(paramTime)
-	encoding = encoding << 6
-	encoding = encoding & time_to_second(paramTime)*/
-	
 	return encoding
 }
 
@@ -835,24 +758,6 @@ define_function showSourceControlPopup (integer input)
 			disableDragItemsAll (vdvDragAndDropTpTable)
 			sendCommand (vdvMultiPreview, "'SNAPSHOTS_INPUT-',itoa(input)")
 		}
-		
-		/*active (input == dvDvxVidInBluray.port):
-		{
-			moderoEnablePopup (dvTpTableMain, POPUP_NAME_SOURCE_CONTROL_BACKGROUNDS[input])
-			moderoEnablePopup (dvTpTableMain, POPUP_NAME_SOURCE_CONTROL_BLURAY_NAVIGATION)
-			// deactivate the source selection drag areas
-			disableDragItemsAll (vdvDragAndDropTpTable)
-			sendCommand (vdvMultiPreview, "'SNAPSHOTS_INPUT-',itoa(input)")
-		}*/
-		
-		/*active (input == dvDvxVidInTv.port):
-		{
-			moderoEnablePopup (dvTpTableMain, POPUP_NAME_SOURCE_CONTROL_BACKGROUNDS[input])
-			moderoEnablePopup (dvTpTableMain, POPUP_NAME_SOURCE_CONTROL_BLURAY_TV_CHANNEL_LIST)
-			// deactivate the source selection drag areas
-			disableDragItemsAll (vdvDragAndDropTpTable)
-			sendCommand (vdvMultiPreview, "'SNAPSHOTS_INPUT-',itoa(input)")
-		}*/
 	}
 }
 
@@ -959,8 +864,6 @@ define_function addDragItemsAll (dev dragAndDropVirtual)
 	{
 	    addDragItem (vdvDragAndDropTpTable, dvDvxVidInEnzo.port)
 	    addDragItem (vdvDragAndDropTpTable, dvDvxVidInAppleTv.port)
-	    //addDragItem (vdvDragAndDropTpTable, dvDvxVidInTx1.port)
-	    //addDragItem (vdvDragAndDropTpTable, dvDvxVidInTx2.port)
 	    addDragItem (vdvDragAndDropTpTable, dvDvxVidInTx3.port)
 	    addDragItem (vdvDragAndDropTpTable, dvDvxVidInTx4.port)
 	}
@@ -987,8 +890,6 @@ define_function enableDragItemsAll (dev dragAndDropVirtual)
 		{
 			enableDragItem (vdvDragAndDropTpTable, dvDvxVidInEnzo.port)
 			enableDragItem (vdvDragAndDropTpTable, dvDvxVidInAppleTv.port)
-			//enableDragItem (vdvDragAndDropTpTable, dvDvxVidInTx1.port)
-			//enableDragItem (vdvDragAndDropTpTable, dvDvxVidInTx2.port)
 			enableDragItem (vdvDragAndDropTpTable, dvDvxVidInTx3.port)
 			enableDragItem (vdvDragAndDropTpTable, dvDvxVidInTx4.port)
 		}
@@ -1168,59 +1069,12 @@ define_function showSourceOnDisplay (integer input, integer output)
 	
 	// set flag to indicate that system is in use
 	setFlagAvSystemInUse (TRUE)
-	
-	
-	
-	/*select
-	{
-		/*active (input = dvDvxVidInEnzo.port):
-		{
-			moderoEnablePopup (dvTpTableMain, POPUP_NAME_SOURCE_CONTROL_BACKGROUNDS[input])
-			moderoEnablePopup (dvTpTableMain, 'popup-source-control-enzo')
-			// deactivate the source selection drag areas
-			disableDragItemsAll (vdvDragAndDropTpTable)
-		}*/
-		
-		/*active (input = dvDvxVidInPc.port):
-		{
-		}*/
-		
-		/*active (input = dvDvxVidInTx3.port):
-		{
-		}*/
-		
-		/*active (input = dvDvxVidInBluray.port):
-		{
-			moderoEnablePopup (dvTpTableMain, POPUP_NAME_SOURCE_CONTROL_BACKGROUNDS[input])
-			moderoEnablePopup (dvTpTableMain, 'popup-source-control-bluray-navigation')
-			// deactivate the source selection drag areas
-			disableDragItemsAll (vdvDragAndDropTpTable)
-		}*/
-		
-		/*active (input = dvDvxVidInTv.port):
-		{
-			moderoEnablePopup (dvTpTableMain, POPUP_NAME_SOURCE_CONTROL_BACKGROUNDS[input])
-			moderoEnablePopup (dvTpTableMain, 'popup-source-control-tv-channel-list')
-			// deactivate the source selection drag areas
-			disableDragItemsAll (vdvDragAndDropTpTable)
-		}*/
-	}*/
 }
 
 define_function setFlagAvSystemInUse (integer boolean)
 {
 	isSystemAvInUse = boolean
 }
-
-/*define_function setSystemMode (integer mode)
-{
-	systemMode = mode
-}
-
-define_function integer getSystemMode ()
-{
-	return systemMode
-}*/
 
 
 define_function shutdownAvSystem ()
@@ -1243,7 +1097,6 @@ define_function shutdownAvSystem ()
 		showNextMeetingInfoOnTableSplashScreen ()
 
 	// Lights - recall the "all on" preset
-	//lightsEnablePresetAllOn ()
 	lightsSetLevelWithFade (cLightAddressBoardroom, 100, 1)
 	
 	// End Enzo session
@@ -1293,7 +1146,7 @@ define_function shutdownAvSystem ()
 	
 	
 	userAcknowledgedSelectingInputWithNoSignal = false
-	//cancel_wait 'WAITING_FOR_USER_TO_ACKNOWLEDGE_SENDING_NO_SIGNAL_INPUT_TO_MONITOR'
+	
 	wait waitTimeDigitalSignage 'WAITING TO SHOW SIGNAGE'
 	{
 		dvxSwitchVideoOnly(dvDvxMain, dvDvxVidInSignage.port, dvDvxVidOutMonitorLeft.port)
@@ -1332,12 +1185,7 @@ define_function sendSelectedInputToLeftMonitor (integer input, integer output)
 	sendCommand (vdvMultiPreview, "'SNAPSHOTS'")
 	
 	channelOff (dvTpTableVideo, BTN_DROP_AREA_TP_TABLE_HIGHLIGHT_MONITOR_LEFT)
-	
-	/*if (input == dvDvxVidInPc.port)
-	{
-		wakeOnLan (MAC_ADDRESS_PC)
-	}*/
-	
+
 	if ( (selectedAudioInput == DVX_PORT_AUD_IN_NONE) or
 		 ((audioFollowingVideoOutput == dvDvxVidOutMonitorRight.port) and (signalStatusDvxInputMonitorRight != DVX_SIGNAL_STATUS_VALID_SIGNAL))  )
 	{
@@ -1351,14 +1199,6 @@ define_function sendSelectedInputToLeftMonitor (integer input, integer output)
 	
 	// set flag to indicate that system is in use
 	isSystemAvInUse = TRUE
-	
-	/*moderoButtonCopyAttribute (dvTpTableVideo, 
-				   PORT_TP_VIDEO, 
-				   btnAdrsVideoSnapshotPreviews[idDragItem], 
-				   MODERO_BUTTON_STATE_OFF,
-				   BTN_ADR_VIDEO_MONITOR_LEFT_PREVIEW_SNAPSHOT, 
-				   MODERO_BUTTON_STATE_ALL,
-				   MODERO_BUTTON_ATTRIBUTE_BITMAP)*/
 }
 
 
@@ -1378,13 +1218,8 @@ define_function sendSelectedInputToRightMonitor (integer input, integer output)
 	
 	channelOff (dvTpTableVideo, BTN_DROP_AREA_TP_TABLE_HIGHLIGHT_MONITOR_RIGHT)
 	
-	/*if (input == dvDvxVidInPc.port)
-	{
-		wakeOnLan (MAC_ADDRESS_PC)
-	}*/
-
 	if ( (selectedAudioInput == DVX_PORT_AUD_IN_NONE) or
-		 ((audioFollowingVideoOutput == dvDvxVidOutMonitorLeft.port) and (signalStatusDvxInputMonitorLeft != DVX_SIGNAL_STATUS_VALID_SIGNAL))    )
+		 ((audioFollowingVideoOutput == dvDvxVidOutMonitorLeft.port) and (signalStatusDvxInputMonitorLeft != DVX_SIGNAL_STATUS_VALID_SIGNAL)) )
 	{
 		audioFollowingVideoOutput = dvDvxVidOutMonitorRight.port
 	}
@@ -1396,14 +1231,6 @@ define_function sendSelectedInputToRightMonitor (integer input, integer output)
 
 	// set flag to indicate that system is in use
 	isSystemAvInUse = TRUE
-	
-	/*moderoButtonCopyAttribute (dvTpTableVideo, 
-				   PORT_TP_VIDEO, 
-				   btnAdrsVideoSnapshotPreviews[idDragItem], 
-				   MODERO_BUTTON_STATE_OFF,
-				   BTN_ADR_VIDEO_MONITOR_RIGHT_PREVIEW_SNAPSHOT, 
-				   MODERO_BUTTON_STATE_ALL,
-				   MODERO_BUTTON_ATTRIBUTE_BITMAP)*/
 }
 
 
@@ -1450,7 +1277,6 @@ define_function tableInputDetected (dev dvTxVidIn)
 	 * --------------------
 	 */
 	
-	//if (rmsSchedule.bookingIdCurrentMeeting != '')	// if a meeting is currently in session
 	if ((meetingInSession == true) and (tablePanelInUse == true))
 	{
 		if (!isSystemAvInUse)
@@ -1473,175 +1299,54 @@ define_function tableInputDetected (dev dvTxVidIn)
 			}
 			
 			sendSelectedInputToLeftMonitor (input, dvDvxVidOutMonitorLeft.port)
-	
-			/*
-			// route the DVX input for this TX to the DVX output for the left monitor
-			dvxSwitchVideoOnly (dvDvxMain, input, dvDvxVidOutMonitorLeft.port)
-			// route the audio from the DVX input for this TX to the DVX output for the speakers
-			dvxSwitchAudioOnly (dvDvxMain, input, dvDvxAudOutSpeakers.port)
-			// set the flag to show that the audio is following the left screen
-			audioFollowingVideoOutput = dvDvxVidOutMonitorLeft.port
-	
-			// lower the shades, raise the blockouts
-			amxRelayPulse (dvRelaysRelBox, REL_BLOCKOUTS_CORNER_WINDOW_UP)
-			amxRelayPulse (dvRelaysRelBox, REL_BLOCKOUTS_WALL_WINDOW_UP)
-			amxRelayPulse (dvRelaysRelBox, REL_SHADES_CORNER_WINDOW_DN)
-			amxRelayPulse (dvRelaysRelBox, REL_SHADES_WALL_WINDOW_DN)
-	
-			// set up a nice lighting atmosphere for viewing the video
-			//lightsSetLevelWithFade (LIGHT_ADDRESS_DOWN_LIGHTS_DESK, LIGHTING_LEVEL_100_PERCENT,5)
-			//lightsSetLevelWithFade (LIGHT_ADDRESS_DOWN_LIGHTS_FRONT_WALL, LIGHTING_LEVEL_40_PERCENT,5)
-			//lightsSetLevelWithFade (LIGHT_ADDRESS_DOWN_LIGHTS_SIDE_AND_BACK_WALLS, LIGHTING_LEVEL_40_PERCENT,5)
-			
-			lightsSetLevelWithFade (cLightAddressBoardroom, LIGHTING_LEVEL_40_PERCENT,5)
-	
-			// turn on the left monitor
-			necMonitorSetPowerOn (vdvMonitorLeft)
-	
-			// flip the panel to the main page
-			moderoSetPage (dvTpTableMain, PAGE_NAME_MAIN_USER)
-			// show the source selection / volume control page
-			moderoEnablePopupOnPage (dvTpTableMain, POPUP_NAME_SOURCE_SELECTION,PAGE_NAME_MAIN_USER)
-			
-			//show the draggable source popups
-			//moderoEnablePopup (dvTpTableMain, POPUP_NAME_DRAGGABLE_SOURCES[dvDvxVidInEnzo.port])
-			//moderoEnablePopup (dvTpTableMain, POPUP_NAME_DRAGGABLE_SOURCES[dvDvxVidInAppleTv.port])
-			//moderoEnablePopup (dvTpTableMain, POPUP_NAME_DRAGGABLE_SOURCES[dvDvxVidInTx1.port])
-			//moderoEnablePopup (dvTpTableMain, POPUP_NAME_DRAGGABLE_SOURCES[dvDvxVidInTx2.port])
-			//moderoEnablePopup (dvTpTableMain, POPUP_NAME_DRAGGABLE_SOURCES[dvDvxVidInTx3.port])
-			//moderoEnablePopup (dvTpTableMain, POPUP_NAME_DRAGGABLE_SOURCES[dvDvxVidInTx4.port])
-			//show the draggable source popups
-			moderoEnablePopupOnPage (dvTpTableMain, POPUP_NAME_DRAGGABLE_SOURCES[dvDvxVidInEnzo.port],PAGE_NAME_MAIN_USER)
-			moderoEnablePopupOnPage (dvTpTableMain, POPUP_NAME_DRAGGABLE_SOURCES[dvDvxVidInAppleTv.port],PAGE_NAME_MAIN_USER)
-			moderoEnablePopupOnPage (dvTpTableMain, POPUP_NAME_DRAGGABLE_SOURCES[dvDvxVidInTx3.port],PAGE_NAME_MAIN_USER)
-			moderoEnablePopupOnPage (dvTpTableMain, POPUP_NAME_DRAGGABLE_SOURCES[dvDvxVidInTx4.port],PAGE_NAME_MAIN_USER)
-			
-			// set the flag to show that the AV system is now in use
-			isSystemAvInUse = TRUE
-			*/
 		}
 		// system is in use - is there a monitor not being used?
 		else if (selectedVideoInputMonitorLeft == DVX_PORT_VID_IN_NONE)
 		{
 			stack_var integer input
-	
+			
 			select
 			{
 				active (dvTxVidIn == dvTxTable1VidInDigital):    input = dvDvxVidInTx1.port
 				active (dvTxVidIn == dvTxTable1VidInAnalog):     input = dvDvxVidInTx1.port
-	
+				
 				active (dvTxVidIn == dvTxTable2VidInDigital):    input = dvDvxVidInTx2.port
 				active (dvTxVidIn == dvTxTable2VidInAnalog):     input = dvDvxVidInTx2.port
-	
+				
 				active (dvTxVidIn == dvTxTable3VidInDigital):    input = dvDvxVidInTx3.port
 				active (dvTxVidIn == dvTxTable3VidInAnalog):     input = dvDvxVidInTx3.port
-	
+				
 				active (dvTxVidIn == dvTxTable4VidInDigital):    input = dvDvxVidInTx4.port
 				active (dvTxVidIn == dvTxTable4VidInAnalog):     input = dvDvxVidInTx4.port
 			}
 			
 			sendSelectedInputToLeftMonitor (input, dvDvxVidOutMonitorLeft.port)
-	
-			/*
-			// route the DVX input for this TX to the DVX output for the left monitor
-			dvxSwitchVideoOnly (dvDvxMain, input, dvDvxVidOutMonitorLeft.port)
-	
-			// audio
-			if (  (selectedAudioInput == DVX_PORT_AUD_IN_NONE) or
-				  ((audioFollowingVideoOutput == dvDvxVidOutMonitorRight.port) and (signalStatusDvxInputMonitorRight != DVX_SIGNAL_STATUS_VALID_SIGNAL))  )
-			{
-				audioFollowingVideoOutput = dvDvxVidOutMonitorLeft.port
-			}
-	
-			if (audioFollowingVideoOutput == dvDvxVidOutMonitorLeft.port)
-			{
-				dvxSwitchAudioOnly (dvDvxMain, input, dvDvxAudOutSpeakers.port)
-			}
-	
-			// turn on the left monitor
-			necMonitorSetPowerOn (vdvMonitorLeft)
-			*/
 		}
 		else if (selectedVideoInputMonitorRight == DVX_PORT_VID_IN_NONE)
 		{
 			stack_var integer input
-	
+			
 			select
 			{
 				active (dvTxVidIn == dvTxTable1VidInDigital):    input = dvDvxVidInTx1.port
 				active (dvTxVidIn == dvTxTable1VidInAnalog):     input = dvDvxVidInTx1.port
-	
+				
 				active (dvTxVidIn == dvTxTable2VidInDigital):    input = dvDvxVidInTx2.port
 				active (dvTxVidIn == dvTxTable2VidInAnalog):     input = dvDvxVidInTx2.port
-	
+				
 				active (dvTxVidIn == dvTxTable3VidInDigital):    input = dvDvxVidInTx3.port
 				active (dvTxVidIn == dvTxTable3VidInAnalog):     input = dvDvxVidInTx3.port
-	
+				
 				active (dvTxVidIn == dvTxTable4VidInDigital):    input = dvDvxVidInTx4.port
 				active (dvTxVidIn == dvTxTable4VidInAnalog):     input = dvDvxVidInTx4.port
 			}
 			
-			
 			sendSelectedInputToRightMonitor (input, dvDvxVidOutMonitorRight.port)
-	
-			/*
-			// route the DVX input for this TX to the DVX output for the right monitor
-			dvxSwitchVideoOnly (dvDvxMain, input, dvDvxVidOutMonitorRight.port)
-	
-			// audio
-			if (  (selectedAudioInput == DVX_PORT_AUD_IN_NONE) or
-				  ((audioFollowingVideoOutput == dvDvxVidOutMonitorLeft.port) and (signalStatusDvxInputMonitorLeft != DVX_SIGNAL_STATUS_VALID_SIGNAL))    )
-			{
-				audioFollowingVideoOutput = dvDvxVidOutMonitorRight.port
-			}
-	
-			if (audioFollowingVideoOutput == dvDvxVidOutMonitorRight.port)
-			{
-				dvxSwitchAudioOnly (dvDvxMain, input, dvDvxAudOutSpeakers.port)
-			}
-	
-			// turn on the right monitor
-			necMonitorSetPowerOn (vdvMonitorRight)
-			*/
 		}
 	}
 }
 
-/*
-define_function loadVideoPreviewWindow (dev dvDvxVidInPort)
-{
-	// kill the multi-preview snapshot timeline
-	stopMultiPreviewSnapshots ()
 
-	// turn on the video being previed flag
-	ON [isVideoBeingPreviewed]
-
-	// delete video snapshot on the video preview button
-	moderoDeleteButtonVideoSnapshot (dvTpTableVideo, BTN_ADR_VIDEO_PREVIEW_WINDOW, MODERO_BUTTON_STATE_ALL)
-
-	moderoDisableButtonFeedback (dvTpTableVideo, BTN_VIDEO_PREVIEW_LOADING_BAR)    // reset the loading progress bar
-
-	moderoSetButtonOpacity (dvTpTableVideo, BTN_ADR_VIDEO_PREVIEW_WINDOW, MODERO_BUTTON_STATE_ALL, MODERO_OPACITY_INVISIBLE)
-	//moderoSetButtonHide (dvTpTableVideo, BTN_ADR_VIDEO_PREVIEW_WINDOW)
-	moderoSetButtonShow (dvTpTableVideo, BTN_ADR_VIDEO_LOADING_PREVIEW)
-	moderoSetButtonShow (dvTpTableVideo, BTN_ADR_VIDEO_PREVIEW_LOADING_BAR)
-
-	moderoEnablePopup (dvTpTableVideo, POPUP_NAME_VIDEO_PREVIEW)
-
-	moderoEnableButtonFeedback (dvTpTableVideo, BTN_VIDEO_PREVIEW_LOADING_BAR) //start the loading progress bar
-
-	dvxSwitchVideoOnly (dvDvxMain, dvDvxVidInPort.port, dvDvxVidOutMultiPreview.port)
-
-	CANCEL_WAIT 'WAIT_HIDE_VIDEO_LOADING_BUTTON'
-	WAIT waitTimeVideoLoading 'WAIT_HIDE_VIDEO_LOADING_BUTTON'
-	{
-		moderoSetButtonHide (dvTpTableVideo, BTN_ADR_VIDEO_LOADING_PREVIEW)
-		moderoSetButtonHide (dvTpTableVideo, BTN_ADR_VIDEO_PREVIEW_LOADING_BAR)
-		//moderoSetButtonShow (dvTpTableVideo, BTN_ADR_VIDEO_PREVIEW_WINDOW)
-		moderoSetButtonOpacity (dvTpTableVideo, BTN_ADR_VIDEO_PREVIEW_WINDOW, MODERO_BUTTON_STATE_ALL, MODERO_OPACITY_OPAQUE)
-	}
-}
-*/
 
 
 /*
@@ -1652,31 +1357,26 @@ define_function loadVideoPreviewWindow (dev dvDvxVidInPort)
 
 define_function lightsEnablePresetAllOn()
 {
-	//lightsPassThroughData (DYNALITE_PROTOCOL_RECALL_PRESET_ALL_ON)
 	lightsOn (cLightAddressBoardroom)
 }
 
 define_function lightsEnablePresetAllOff()
 {
-	//lightsPassThroughData (DYNALITE_PROTOCOL_RECALL_PRESET_ALL_OFF)
 	lightsOff (cLightAddressBoardroom)
 }
 
 define_function lightsEnablePresetAllDim()
 {
-	//lightsPassThroughData (DYNALITE_PROTOCOL_RECALL_PRESET_ALL_DIM)
 	lightsSetLevelWithFade (cLightAddressBoardroom, LIGHTING_LEVEL_30_PERCENT, 20)
 }
 
 define_function lightsEnablePresetPresentation()
 {
-	//lightsPassThroughData (DYNALITE_PROTOCOL_RECALL_PRESET_AV_MODE)
 	lightsSetLevelWithFade (cLightAddressBoardroom, LIGHTING_LEVEL_30_PERCENT, 80)
 }
 
 define_function lightsEnablePresetVc()
 {
-	//lightsPassThroughData (DYNALITE_PROTOCOL_RECALL_PRESET_VC_MODE_1)
 	lightsSetLevelWithFade (cLightAddressBoardroom, LIGHTING_LEVEL_30_PERCENT, 40)
 }
 
@@ -1788,9 +1488,6 @@ define_function dvxNotifyVideoInputName (dev dvxVideoInput, char name[])
 	// dvxVideoInput is the D:P:S of the video input port on the DVX switcher. The input number can be taken from dvxVideoInput.PORT
 	// name is the name of the video input
 
-	//moderoSetButtonText (dvTpTableVideo, btnsVideoInputsMonitorLeft[dvxVideoInput.port], MODERO_BUTTON_STATE_ALL, name)
-	//moderoSetButtonText (dvTpTableVideo, btnsVideoInputsMonitorRight[dvxVideoInput.port], MODERO_BUTTON_STATE_ALL, name)
-
 	dvx.videoInputs[dvxVideoInput.port].name = name
 }
 
@@ -1808,7 +1505,6 @@ define_function dvxNotifyVideoInputStatus (dev dvxVideoInput, char signalStatus[
 	if (signalStatus != oldSignalStatus)
 	{
 		dvx.videoInputs[dvxVideoInput.port].status = signalStatus
-		//startMultiPreviewSnapshots ()
 	}
 
 
@@ -1817,19 +1513,9 @@ define_function dvxNotifyVideoInputStatus (dev dvxVideoInput, char signalStatus[
 		case DVX_SIGNAL_STATUS_NO_SIGNAL:
 		case DVX_SIGNAL_STATUS_UNKNOWN:
 		{
-			/*send_string 0, "'DEBUG[File ',__FILE__,', Line ',itoa(__LINE__),'] - load "no video" image for input #',itoa(dvxVideoInput.port),' (left input selection)'"
-			moderoSetButtonBitmap (dvTpTableVideo, BTN_ADRS_VIDEO_MONITOR_LEFT_INPUT_SELECTION[dvxVideoInput.port],MODERO_BUTTON_STATE_ALL,IMAGE_FILE_NAME_NO_IMAGE_ICON)
-			send_string 0, "'DEBUG[File ',__FILE__,', Line ',itoa(__LINE__),'] - load "no video" image for input #',itoa(dvxVideoInput.port),' (right input selection)'"
-			moderoSetButtonBitmap (dvTpTableVideo, BTN_ADRS_VIDEO_MONITOR_RIGHT_INPUT_SELECTION[dvxVideoInput.port],MODERO_BUTTON_STATE_ALL,IMAGE_FILE_NAME_NO_IMAGE_ICON)*/
 		}
 		case DVX_SIGNAL_STATUS_VALID_SIGNAL:
 		{
-			/*moderoEnableButtonScaleToFit (dvTpTableVideo, BTN_ADRS_VIDEO_MONITOR_LEFT_INPUT_SELECTION[dvxVideoInput.port],MODERO_BUTTON_STATE_ALL)
-			moderoEnableButtonScaleToFit (dvTpTableVideo, BTN_ADRS_VIDEO_MONITOR_RIGHT_INPUT_SELECTION[dvxVideoInput.port],MODERO_BUTTON_STATE_ALL)*/
-
-			// NOTE: Don't set the dynamic resource here. That should be done by the timeline event for taking snapshots.
-			// Otherwise it could result in the snapshots image of the currently routed video to the MPL being shown on all snapshot buttons.
-
 		}
 	}
 
@@ -1939,7 +1625,7 @@ define_function dvxNotifyAudioOutMute (dev dvxAudioOutput, char muteStatus[])
 		switch (muteStatus)
 		{
 			case STATUS_ENABLE:    moderoEnableButtonFeedback (dvTpTableAudio, BTN_AUDIO_VOLUME_MUTE)
-
+			
 			case STATUS_DISABLE:   moderoDisableButtonFeedback (dvTpTableAudio, BTN_AUDIO_VOLUME_MUTE)
 		}
 	}
@@ -2138,23 +1824,6 @@ define_function dxlinkNotifyTxVideoInputStatusDigital (dev dxlinkTxDigitalVideoI
 	}
 }
 
-/*
-#define INCLUDE_DXLINK_NOTIFY_TX_VIDEO_INPUT_FORMAT_ANALOG_CALLBACK
-define_function dxlinkNotifyTxVideoInputFormatAnalog (dev dxlinkTxAnalogVideoInput, char videoFormat[])
-{
-	// dxlinkTxAnalogVideoInput is the analog video input port on the DXLink Tx
-	// videoFormat is the video format (VIDEO_SIGNAL_FORMAT_VGA | VIDEO_SIGNAL_FORMAT_COMPOSITE | VIDEO_SIGNAL_FORMAT_COMPONENT | VIDEO_SIGNAL_FORMAT_SVIDEO)
-}
-*/
-/*
-#define INCLUDE_DXLINK_NOTIFY_TX_VIDEO_INPUT_FORMAT_DIGITAL_CALLBACK
-define_function dxlinkNotifyTxVideoInputFormatDigital (dev dxlinkTxDigitalVideoInput, char videoFormat[])
-{
-	// dxlinkTxDigitalVideoInput is the digital video input port on the DXLink Tx
-	// videoFormat is the video format (VIDEO_SIGNAL_FORMAT_DVI | VIDEO_SIGNAL_FORMAT_HDMI)
-}
-*/
-
 #define INCLUDE_DXLINK_NOTIFY_TX_SWITCH_CALLBACK
 define_function dxlinkNotifyTxSwitch (dev dxlinkTxPort1, integer input, integer output)
 {
@@ -2187,22 +1856,6 @@ define_function dxlinkNotifyTxSwitch (dev dxlinkTxPort1, integer input, integer 
 	}
 }
 
-/*
-#define INCLUDE_DXLINK_NOTIFY_TX_VIDEO_INPUT_RESOLUTION_ANALOG_CALLBACK
-define_function dxlinkNotifyTxVideoInputResolutionAnalog (dev dxlinkTxAnalogVideoInput, char resolution[])
-{
-	// dxlinkTxAnalogVideoInput is the analog video input port on the DXLink Tx
-	// resolution is the input resolution.
-}
-*/
-/*
-#define INCLUDE_DXLINK_NOTIFY_TX_VIDEO_INPUT_RESOLUTION_DIGITAL_CALLBACK
-define_function dxlinkNotifyTxVideoInputResolutionDigital (dev dxlinkTxDigitalVideoInput, char resolution[])
-{
-	// dxlinkTxDigitalVideoInput is the digital video input port on the DXLink Tx
-	// resolution is the input resolution.
-}
-*/
 
 /*
  * --------------------
@@ -2211,24 +1864,6 @@ define_function dxlinkNotifyTxVideoInputResolutionDigital (dev dxlinkTxDigitalVi
  */
 
 
-/*
-#define INCLUDE_PDU_NOTIFY_OVER_CURRENT_CALLBACK
-define_function pduNotifyOverCurrent (dev pduPort1, integer outlet, float current)
-{
-	// pduPort1 is port 1 on the PDU
-	// outlet is the outlet of the PDU which is reporting overcurrent. If nPduOutlet is zero (0) then entire PDU is over current.
-	// current is the current (in Amps)
-}
-*/
-
-/*
-#define INCLUDE_PDU_NOTIFY_PERSIST_STATE_ALL_OUTLETS_CALLBACK
-define_function pduNotifyPersistStateAllOutlets (dev pduPort1, integer outletPersistStates[])
-{
-	// pduPort1 is port 1 on the PDU
-	// outletPersistStates is an array containing the persist state of each outlet on the PDU
-}
-*/
 
 #define INCLUDE_PDU_NOTIFY_POWER_SENSE_TRIGGER_CALLBACK
 define_function pduNotifyPowerSenseTrigger (dev pduPort1, integer outlet, float triggerValue)
@@ -2316,23 +1951,6 @@ define_function pduNotifyOutletRelay (dev pduOutletPort, integer relayStatus)
 }
 
 
-/*
-#define INCLUDE_PDU_NOTIFY_SERIAL_NUMBER_CALLBACK
-define_function fnPdyNotifySerialNumber (dev pduPort1, char serialNumber[])
-{
-	// pduPort1 is port 1 on the PDU
-	// serialNumber is the serial number of the PDU
-}
-*/
-
-/*
-#define INCLUDE_PDU_NOTIFY_VERSION_CALLBACK
-define_function pduNotifyVersion (dev pduPort1, float version)
-{
-	// pduPort1 is port 1 on the PDU
-	// version is the version of firmware running on the PDU
-}
-*/
 
 #define INCLUDE_PDU_NOTIFY_INPUT_VOLTAGE_CALLBACK
 define_function pduNotifyInputVoltage (dev pduPort1, float voltage)
@@ -2390,16 +2008,6 @@ define_function pduNotifyOutletCurrent (dev pduOutletPort, float current)
 }
 
 
-/*
-#define INCLUDE_PDU_NOTIFY_OUTLET_POWER_FACTOR_CALLBACK
-define_function pduNotifyOutletPowerFactor (dev pduOutletPort, float powerFactor)
-{
-	// pduOutletPort is the outlet on the PDU reporting its power factor
-	// powerFactor is the Power Factor: W/VA, 2 decimal places (data scale factor = 100).
-	//     - "Power Factor" is the ratio of real power to apparent power.
-}
-*/
-
 
 #define INCLUDE_PDU_NOTIFY_OUTLET_POWER_CALLBACK
 define_function pduNotifyOutletEnergy (dev pduOutletPort, float accumulatedEnergy)
@@ -2427,39 +2035,6 @@ define_function pduNotifyAxlinkVoltage (dev pduPort2, float voltage)
 	// voltage is the voltage (V): Resolution to 0.1V (data scale factor = 10)
 	moderoSetButtonText (dvTpTablePower, BTN_ADR_POWER_AXLINK_VOLTAGE, MODERO_BUTTON_STATE_ALL, ftoa(voltage))
 }
-
-
-/*
-#define INCLUDE_PDU_NOTIFY_AXLINK_POWER
-define_function pduNotifyAxlinkPower (dev pduAxlinkBus, float power)
-{
-	// pduAxlinkBus is an Axlink bus on the PDU
-	// power is the power (W): Resolution to 0.1W (data scale factor = 10)
-}
-*/
-
-/*
-#define INCLUDE_PDU_NOTIFY_AXLINK_CURRENT
-define_function pduNotifyAxlinkCurrent (dev pduAxlinkBus, float current)
-{
-	// pduAxlinkBus is an Axlink bus on the PDU
-	// current is the curren (A): Resolution to 0.1A (data scale factor = 10)
-}
-*/
-
-
-#define INCLUDE_PDU_NOTIFY_TEMPERATURE_SCALE_CELCIUS
-define_function pduNotifyTemperatureScaleCelcius (dev pduPort1)
-{
-	// pduPort1 is the first device on the PDU
-}
-
-#define INCLUDE_PDU_NOTIFY_TEMPERATURE_SCALE_FAHRENHEIT
-define_function pduNotifyTemperatureScaleFahrenheit (dev pduPort1)
-{
-	// pduPort1 is the first device on the PDU
-}
-
 
 
 
@@ -2494,9 +2069,6 @@ define_function amxControlPortNotifyIoInputOn (dev ioPort, integer ioChanCde)
 
 				// wake up the touch panel
 				moderoWake (dvTpTableMain)
-
-				// start taking snapshots (just in case the person who triggered the occ sensor wants to go to the source selection page)
-				//startMultiPreviewSnapshots ()
 			}
 		}
 	}
@@ -2552,69 +2124,6 @@ define_function amxControlPortNotifyIoInputOff (dev ioPort, integer ioChanCde)
  */
 
 
-
-(***********************************************************)
-(* Name:  RmsEventSchedulingBookingsRecordResponse         *)
-(* Args:                                                   *)
-(* CHAR isDefaultLocation - boolean, TRUE if the location  *)
-(* in the response is the default location                 *)
-(*                                                         *)
-(* INTEGER recordIndex - The index position of this record *)
-(*                                                         *)
-(* INTEGER recordCount - Total record count                *)
-(*                                                         *)
-(* CHAR bookingId[] - The booking ID string                *)
-(*                                                         *)
-(* RmsEventBookingResponse eventBookingResponse - A        *)
-(* structure with additional booking information           *)
-(*                                                         *)
-(* Desc:  Implementations of this method will be called    *)
-(* in response to a query for booking events.              *)
-(*                                                         *)
-(***********************************************************)
-#DEFINE INCLUDE_SCHEDULING_BOOKINGS_RECORD_RESPONSE_CALLBACK
-DEFINE_FUNCTION RmsEventSchedulingBookingsRecordResponse(CHAR isDefaultLocation, 
-												         INTEGER recordIndex, 
-												         INTEGER recordCount, 
-												         CHAR bookingId[], 
-												         RmsEventBookingResponse eventBookingResponse)
-{
-	debugPrint ("'******************** FUNCTION - RmsEventSchedulingBookingsRecordResponse(...)'")
-	debugPrint ("'isDefaultLocation = ',itoa(isDefaultLocation)")
-	debugPrint ("'recordIndex = ',itoa(recordIndex)")
-	debugPrint ("'recordCount = ',itoa(recordCount)")
-	debugPrint ("'bookingId = ',bookingId")
-	debugPrintRmsEventBookingResponse (eventBookingResponse)
-	debugPrint ("'******************************** END FUNCTION ********************************'")
-}
-
-(***********************************************************)
-(* Name:  RmsEventSchedulingBookingResponse                *)
-(* Args:                                                   *)
-(* CHAR isDefaultLocation - boolean, TRUE if the location  *)
-(* in the response is the default location                 *)
-(*                                                         *)
-(* CHAR bookingId[] - The booking ID string                *)
-(*                                                         *)
-(* RmsEventBookingResponse eventBookingResponse - A        *)
-(* structure with additional booking information           *)
-(*                                                         *)
-(* Desc:  Implementations of this method will be called    *)
-(* in response to a query for information about a specific *)
-(* booking event ID                                        *)
-(*                                                         *)
-(***********************************************************)
-#DEFINE INCLUDE_SCHEDULING_BOOKING_RESPONSE_CALLBACK
-DEFINE_FUNCTION RmsEventSchedulingBookingResponse(CHAR isDefaultLocation, 
-												  CHAR bookingId[], 
-												  RmsEventBookingResponse eventBookingResponse)
-{
-	debugPrint ("'******************** FUNCTION - RmsEventSchedulingBookingResponse(...)'")
-	debugPrint ("'isDefaultLocation = ',itoa(isDefaultLocation)")
-	debugPrint ("'bookingId = ',bookingId")
-	debugPrintRmsEventBookingResponse (eventBookingResponse)
-	debugPrint ("'******************************** END FUNCTION ********************************'")
-}
 
 (***********************************************************)
 (* Name:  RmsEventSchedulingActiveResponse                 *)
@@ -2955,22 +2464,6 @@ DEFINE_FUNCTION RmsEventSchedulingExtendResponse(CHAR isDefaultLocation,
 		}
 		case true:
 		{
-			/*char endTime12HourFormat[7]
-			
-			if (atoi(left_string(eventBookingResponse.endTime,2)) > 12)
-			{
-				endTime12HourFormat = "itoa(atoi(left_string(eventBookingResponse.endTime,2)) - 12),':',mid_string(eventBookingResponse.endTime,4,2),'pm'"
-			}
-			else if (atoi(left_string(eventBookingResponse.endTime,2)) == 12)
-			{
-				endTime12HourFormat = "left_string(eventBookingResponse.endTime,2),':',mid_string(eventBookingResponse.endTime,4,2),'pm'"
-			}
-			else
-			{
-				endTime12HourFormat = "left_string(eventBookingResponse.endTime,2),':',mid_string(eventBookingResponse.endTime,4,2),'am'"
-			}*/
-			
-			
 			// deactivate the source selection drag areas
 			disableDragItemsAll (vdvDragAndDropTpTable)
 			//moderoSetButtonText (dvTpTableRmsCustom, BTN_ADR_TABLE_PANEL_MEETING_END_TIME, MODERO_BUTTON_STATE_ALL, endTime12HourFormat)
@@ -2982,33 +2475,6 @@ DEFINE_FUNCTION RmsEventSchedulingExtendResponse(CHAR isDefaultLocation,
 	}
 }
 
-(***********************************************************)
-(* Name:  RmsEventSchedulingEndResponse                    *)
-(* Args:                                                   *)
-(* CHAR isDefaultLocation - boolean, TRUE if the location  *)
-(* in the response is the default location                 *)
-(*                                                         *)
-(* CHAR responseText[] - Booking ID if successful else     *)
-(* some error information.                                 *)
-(*                                                         *)
-(* RmsEventBookingResponse eventBookingResponse - A        *)
-(* structure with additional booking information           *)
-(*                                                         *)
-(* Desc:  Implementations of this method will be called    *)
-(* in response to a ending a booking event                 *)
-(*                                                         *)
-(***********************************************************)
-#DEFINE INCLUDE_SCHEDULING_END_RESPONSE_CALLBACK
-DEFINE_FUNCTION RmsEventSchedulingEndResponse(CHAR isDefaultLocation, 
-											  CHAR responseText[], 
-											  RmsEventBookingResponse eventBookingResponse)
-{
-	debugPrint ("'******************** FUNCTION - RmsEventSchedulingEndResponse(...)'")
-	debugPrint ("'isDefaultLocation = ',itoa(isDefaultLocation)")
-	debugPrint ("'responseText = ',responseText")
-	debugPrintRmsEventBookingResponse (eventBookingResponse)
-	debugPrint ("'******************************** END FUNCTION ********************************'")
-}
 
 (***********************************************************)
 (* Name:  RmsEventSchedulingActiveUpdated                  *)
@@ -3083,73 +2549,6 @@ DEFINE_FUNCTION RmsEventSchedulingActiveUpdated(CHAR bookingId[],
 		}
 	}
 	
-	
-	
-	/*if (waitingForAdhocBookingResponse == false)
-	{
-		if (rmsSchedule.bookingIdNextMeeting == '')	// no upcoming meetings
-		{
-			if ( (schedulingPanelInUse == false) or ((schedulingPanelInUse == true) and (schedulingPanelShowingBookingSucceededMessageWhileInUse == false)) )
-			{
-				moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_NEXT_MEETING_START_TIME, MODERO_BUTTON_STATE_ALL, getTimeString12HourFormatAmPm(rmsSchedule.currentMeetingEndTime))
-				moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)
-			}
-			else
-			{
-				cancel_wait  'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-				wait_until (schedulingPanelInUse = false) 'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-				{
-					moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_NEXT_MEETING_START_TIME, MODERO_BUTTON_STATE_ALL, getTimeString12HourFormatAmPm(rmsSchedule.currentMeetingEndTime))
-					moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)
-				}
-			}
-		}
-		else	// there are meetings scheduled after the current meeting
-		{
-			// if there's not enough time remaining to squeeze in a meeting immediately following the current meeting which has just ended
-			// before the next scheduled meeting
-			if (rmsSchedule.nextMeetingMinutesUntilStart <= bookingTime)
-			{
-				if ( (schedulingPanelInUse == false) or ((schedulingPanelInUse == true) and (schedulingPanelShowingBookingSucceededMessageWhileInUse == false)) )
-				{
-					moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_BOOKING_MSG, MODERO_BUTTON_STATE_ALL, "'Next meeting will begin in ', getFuzzyTimeString(rmsSchedule.nextMeetingMinutesUntilStart)")
-					
-					moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-					moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookingSuccessful, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-				}
-				else
-				{
-					cancel_wait  'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					wait_until (schedulingPanelInUse = false) 'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					{
-						moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_BOOKING_MSG, MODERO_BUTTON_STATE_ALL, "'Next meeting will begin in ', getFuzzyTimeString(rmsSchedule.nextMeetingMinutesUntilStart)")
-						
-						moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-						moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookingSuccessful, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-					}
-				}
-			}
-			else	// there's still enough time to squeeze in another meeting
-			{
-				if ( (schedulingPanelInUse == false) or ((schedulingPanelInUse == true) and (schedulingPanelShowingBookingSucceededMessageWhileInUse == false)) )
-				{
-					moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_NEXT_MEETING_START_TIME, MODERO_BUTTON_STATE_ALL, getTimeString12HourFormatAmPm(rmsSchedule.currentMeetingEndTime))
-					moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)
-				}
-				else
-				{
-					cancel_wait  'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					wait_until (schedulingPanelInUse = false) 'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					{
-						moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_NEXT_MEETING_START_TIME, MODERO_BUTTON_STATE_ALL, getTimeString12HourFormatAmPm(rmsSchedule.currentMeetingEndTime))
-						moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)
-					}
-				}
-			}
-		}
-	}*/
-	
-	
 	updateSchedulingPanelToShowCorrectBookingOption ()
 }
 
@@ -3189,105 +2588,6 @@ DEFINE_FUNCTION RmsEventSchedulingNextActiveUpdated(CHAR bookingId[],
 		showNextMeetingInfoOnTableSplashScreen ()
 	}
 	
-	/*if (waitingForAdhocBookingResponse == false)
-	{
-		if (rmsSchedule.bookingIdCurrentMeeting == '')	// not in a meeting currently
-		{
-			//showNextMeetingInfoCardOnWelcomePanel ()
-			//showNextMeetingInfoOnTableSplashScreen ()
-			
-			// if there's not enough time remaining to squeeze in a meeting before the next scheduled meeting
-			if (rmsSchedule.nextMeetingMinutesUntilStart <= bookingTime)
-			{
-				if ( (schedulingPanelInUse == false) or ((schedulingPanelInUse == true) and (schedulingPanelShowingBookingSucceededMessageWhileInUse == false)) )
-				{
-					moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_BOOKING_MSG, MODERO_BUTTON_STATE_ALL, "'Next meeting will begin in ', getFuzzyTimeString(rmsSchedule.nextMeetingMinutesUntilStart)")
-					
-					moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookNow, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-					moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookingSuccessful, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-				}
-				else
-				{
-					cancel_wait  'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					wait_until (schedulingPanelInUse = false) 'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					{
-						moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_BOOKING_MSG, MODERO_BUTTON_STATE_ALL, "'Next meeting will begin in ', getFuzzyTimeString(rmsSchedule.nextMeetingMinutesUntilStart)")
-						
-						moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookNow, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-						moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookingSuccessful, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-					}
-				}
-			}
-			else	// there's still enough time to squeeze in another meeting
-			{
-				if ( (schedulingPanelInUse == false) or ((schedulingPanelInUse == true) and (schedulingPanelShowingBookingSucceededMessageWhileInUse == false)) )
-				{
-					moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNow, pageWelcomePanelUnlocked)
-				}
-				else
-				{
-					cancel_wait  'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					wait_until (schedulingPanelInUse = false) 'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					{
-						moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNow, pageWelcomePanelUnlocked)
-					}
-				}
-			}
-		}
-		else	// currently in a meeting
-		{
-			
-			//if (userShutdownSystemToEndMeeting == true)
-			//{
-			//	showNextMeetingInfoCardOnWelcomePanel ()
-			//	showNextMeetingInfoOnTableSplashScreen ()
-			//}
-			
-			
-			// if there's not enough time remaining between the current meetings' finish time and the already next booked meeting to squeeze
-			// in a meeting immediately following the current meeting
-			if (rmsSchedule.nextMeetingMinutesUntilStart <= (rmsSchedule.currentMeetingRemainingMinutes + bookingTime))
-			{
-				if ( (schedulingPanelInUse == false) or ((schedulingPanelInUse == true) and (schedulingPanelShowingBookingSucceededMessageWhileInUse == false)) )
-				{
-					moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_BOOKING_MSG, MODERO_BUTTON_STATE_ALL, "'Room in use and next session booked'")
-					
-					moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-					moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookingSuccessful, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-				}
-				else
-				{
-					cancel_wait  'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					wait_until (schedulingPanelInUse = false) 'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					{
-						moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_BOOKING_MSG, MODERO_BUTTON_STATE_ALL, "'Room in use and next session booked'")
-						
-						moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-						moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookingSuccessful, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-					}
-				}
-			}
-			else	// there's still enough time to squeeze in another meeting
-			{
-				if ( (schedulingPanelInUse == false) or ((schedulingPanelInUse == true) and (schedulingPanelShowingBookingSucceededMessageWhileInUse == false)) )
-				{
-					moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_NEXT_MEETING_START_TIME, MODERO_BUTTON_STATE_ALL, getTimeString12HourFormatAmPm(rmsSchedule.currentMeetingEndTime))
-					moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)
-				}
-				else
-				{
-					cancel_wait  'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					wait_until (schedulingPanelInUse = false) 'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					{
-						moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_NEXT_MEETING_START_TIME, MODERO_BUTTON_STATE_ALL, getTimeString12HourFormatAmPm(rmsSchedule.currentMeetingEndTime))
-						moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)
-					}
-				}
-			}
-		}
-	}*/
-	
-	
 	updateSchedulingPanelToShowCorrectBookingOption ()
 	
 }
@@ -3323,69 +2623,6 @@ DEFINE_FUNCTION RmsEventSchedulingEventEnded(CHAR bookingId[],
 		showNextMeetingInfoCardOnWelcomePanel ()
 	else
 		hideMeetingInfoCardOnWelcomePanel()
-	
-	
-	
-	/*if (waitingForAdhocBookingResponse == false)
-	{
-		if (rmsSchedule.bookingIdNextMeeting == '')	// no upcoming meetings
-		{
-			if ( (schedulingPanelInUse == false) or ((schedulingPanelInUse == true) and (schedulingPanelShowingBookingSucceededMessageWhileInUse == false)) )
-			{
-				moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNow, pageWelcomePanelUnlocked)
-			}
-			else
-			{
-				cancel_wait  'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-				wait_until (schedulingPanelInUse = false) 'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-				{
-					moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNow, pageWelcomePanelUnlocked)
-				}
-			}
-		}
-		else	// there are meetings scheduled after the current meeting which has just ended
-		{
-			// if there's not enough time remaining to squeeze in a meeting immediately following the current meeting which has just ended
-			// before the next scheduled meeting
-			if (rmsSchedule.nextMeetingMinutesUntilStart <= bookingTime)
-			{
-				if ( (schedulingPanelInUse == false) or ((schedulingPanelInUse == true) and (schedulingPanelShowingBookingSucceededMessageWhileInUse == false)) )
-				{
-					moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_BOOKING_MSG, MODERO_BUTTON_STATE_ALL, "'Next meeting will begin in ', getFuzzyTimeString(rmsSchedule.nextMeetingMinutesUntilStart)")
-					
-					moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-					moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookingSuccessful, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-				}
-				else
-				{
-					cancel_wait  'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					wait_until (schedulingPanelInUse = false) 'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					{
-						moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_BOOKING_MSG, MODERO_BUTTON_STATE_ALL, "'Next meeting will begin in ', getFuzzyTimeString(rmsSchedule.nextMeetingMinutesUntilStart)")
-						
-						moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-						moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookingSuccessful, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-					}
-				}
-			}
-			else	// there's still enough time to squeeze in another meeting right now before the next scheduled meeting commences
-			{
-				if ( (schedulingPanelInUse == false) or ((schedulingPanelInUse == true) and (schedulingPanelShowingBookingSucceededMessageWhileInUse == false)) )
-				{
-					moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNow, pageWelcomePanelUnlocked)
-				}
-				else
-				{
-					cancel_wait  'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					wait_until (schedulingPanelInUse = false) 'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					{
-						moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNow, pageWelcomePanelUnlocked)
-					}
-				}
-			}
-		}
-	}*/
-	
 	
 	updateSchedulingPanelToShowCorrectBookingOption ()
 }
@@ -3428,98 +2665,8 @@ DEFINE_FUNCTION RmsEventSchedulingEventStarted(CHAR bookingId[],
 	
 	showCurrentMeetingInfoCardOnWelcomePanel ()
 	
-	
-	/*if (waitingForAdhocBookingResponse == false)
-	{
-		// at this point the panel will be showing the "Booking Confirmed" popup
-		if (rmsSchedule.bookingIdNextMeeting == '')	// no upcoming meetings
-		{
-			if ( (schedulingPanelInUse == false) or ((schedulingPanelInUse == true) and (schedulingPanelShowingBookingSucceededMessageWhileInUse == false)) )
-			{
-				moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_NEXT_MEETING_START_TIME, MODERO_BUTTON_STATE_ALL, getTimeString12HourFormatAmPm(rmsSchedule.currentMeetingEndTime))
-				moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)
-			}
-			else
-			{
-				cancel_wait  'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-				wait_until (schedulingPanelInUse = false) 'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-				{
-					moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_NEXT_MEETING_START_TIME, MODERO_BUTTON_STATE_ALL, getTimeString12HourFormatAmPm(rmsSchedule.currentMeetingEndTime))
-					moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)
-				}
-			}
-		}
-		else	// there are upcoming meetings
-		{
-			// if there's not enough time remaining between the current meetings' finish time and the already next booked meeting to squeeze
-			// in a meeting immediately following the current meeting
-			if (rmsSchedule.nextMeetingMinutesUntilStart <= (rmsSchedule.currentMeetingRemainingMinutes + bookingTime))
-			{
-				if ( (schedulingPanelInUse == false) or ((schedulingPanelInUse == true) and (schedulingPanelShowingBookingSucceededMessageWhileInUse == false)) )
-				{
-					moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_BOOKING_MSG, MODERO_BUTTON_STATE_ALL, "'Next meeting will begin in ', getFuzzyTimeString(rmsSchedule.nextMeetingMinutesUntilStart)")
-					
-					moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-					moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookingSuccessful, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-				}
-				else
-				{
-					cancel_wait  'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					wait_until (schedulingPanelInUse = false) 'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					{
-						moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_BOOKING_MSG, MODERO_BUTTON_STATE_ALL, "'Next meeting will begin in ', getFuzzyTimeString(rmsSchedule.nextMeetingMinutesUntilStart)")
-						
-						moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-						moderoDisablePopupOnPage (dvTpSchedulingMain, popupBookingSuccessful, pageWelcomePanelUnlocked)	// this will hide all popups in the same group as nfcBookNext
-					}
-				}
-			}
-			else	// there's still enough time to squeeze in another meeting
-			{
-				if ( (schedulingPanelInUse == false) or ((schedulingPanelInUse == true) and (schedulingPanelShowingBookingSucceededMessageWhileInUse == false)) )
-				{
-					moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_NEXT_MEETING_START_TIME, MODERO_BUTTON_STATE_ALL, getTimeString12HourFormatAmPm(rmsSchedule.currentMeetingEndTime))
-					moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)
-				}
-				else
-				{
-					cancel_wait  'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					wait_until (schedulingPanelInUse = false) 'WAITING FOR USER TO GO AWAY FROM SCHEDULING PANEL'
-					{
-						moderoSetButtonText (dvTpSchedulingRmsCustom, BTN_ADR_SCHEDULING_NEXT_MEETING_START_TIME, MODERO_BUTTON_STATE_ALL, getTimeString12HourFormatAmPm(rmsSchedule.currentMeetingEndTime))
-						moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)
-					}
-				}
-			}
-		}
-	}*/
-	
-	
 	updateSchedulingPanelToShowCorrectBookingOption ()
 }
-
-(***********************************************************)
-(* Name:  RmsEventSchedulingEventUpdated                   *)
-(* Args:                                                   *)
-(* CHAR bookingId[] - The booking ID string                *)
-(*                                                         *)
-(* RmsEventBookingResponse eventBookingResponse - A        *)
-(* structure with additional booking information           *)
-(*                                                         *)
-(* Desc:  Implementations of this method will be called    *)
-(* when RMS indicates a booking event has updated          *)
-(*                                                         *)
-(***********************************************************)
-#DEFINE INCLUDE_SCHEDULING_EVENT_UPDATED_CALLBACK
-DEFINE_FUNCTION RmsEventSchedulingEventUpdated(CHAR bookingId[], 
-											   RmsEventBookingResponse eventBookingResponse)
-{
-	debugPrint ("'******************** FUNCTION - RmsEventSchedulingEventUpdated(...)'")
-	debugPrint ("'bookingId = ',bookingId")
-	debugPrintRmsEventBookingResponse (eventBookingResponse)
-	debugPrint ("'******************************** END FUNCTION ********************************'")
-}
-
 
 define_function debugPrintRmsEventBookingResponse (RmsEventBookingResponse eventBookingResponse)
 {

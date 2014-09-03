@@ -42,7 +42,6 @@ PROGRAM_NAME='amx-au-gc-boardroom-main'
 // as they reference constants within this include file
 #include 'agent-usb-ptz-web-cam'	
 // Need to declare the lighting include file after declaring the lighting devices
-//#include 'dynalite-lighting'
 #include 'cbus-lighting'
 // Need to declare the nec monitor include file after declaring the monitor devices
 #include 'nec-monitor'
@@ -50,10 +49,6 @@ PROGRAM_NAME='amx-au-gc-boardroom-main'
 #include 'wake-on-lan'
 // Need to declare the rms-main include file after declaring the RMS virtual device
 #include 'rms-main'
-
-
-
-
 
 
 #include 'system-modules'
