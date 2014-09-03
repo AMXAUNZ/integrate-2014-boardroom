@@ -53,6 +53,51 @@ integer nLVL_KP_JOG_WHEEL       = 1
 
 /*
  * --------------------
+ * Scheduling touch panel button channel/address/level codes
+ * --------------------
+ */
+
+
+integer BTN_SCHEDULING_AVAILABLE_FB = 1300	// on port 9
+
+integer BTN_ADR_SCHEDULING_BOOKING_MSG = 31
+
+integer BTN_SCHEDULING_USER_LOG_OUT = 10
+integer BTN_ADR_SCHEDULING_USER_WELCOME_MESSAGE = 11
+integer BTN_SCHEDULING_USER_PHOTO = 12
+integer BTN_ADR_SCHEDULING_USER_PHOTO = 12
+integer BTN_SCHEDULING_MAKE_RESERVATION = 212	// for overriding default behaviour of RmsGui
+
+integer BTN_ADR_SCHEDULING_MEETING_CARD_INFO_SUBJECT = 1
+integer BTN_ADR_SCHEDULING_MEETING_CARD_INFO_ORGANIZER = 2
+integer BTN_ADR_SCHEDULING_MEETING_CARD_INFO_START_TIME = 3
+integer BTN_ADR_SCHEDULING_MEETING_CARD_INFO_TIME_REMAINING = 4
+integer BTN_ADR_SCHEDULING_MEETING_CARD_INFO_DESCRIPTION = 5
+integer BTN_ADR_SCHEDULING_MEETING_CARD_INFO_CARD_HEADER = 6
+
+integer BTN_ADR_SCHEDULING_NEXT_MEETING_START_TIME = 13
+
+/*
+ * --------------------
+ * Table touch panel button RMS channel/address/level codes
+ * --------------------
+ */
+
+
+integer BTN_ADR_TABLE_PANEL_USER_PHOTO = 12
+integer BTN_ADR_TABLE_PANEL_USER_PHOTO_BACKGROUND = 13
+integer BTN_ADR_TABLE_PANEL_TAP_ON_INDICATOR = 15
+integer BTN_ADR_TABLE_PANEL_RESERVATION_MESSAGE_1 = 16
+integer BTN_ADR_TABLE_PANEL_RESERVATION_MESSAGE_2 = 17
+integer BTN_ADR_TABLE_PANEL_RESERVATION_MESSAGE_3 = 18
+integer BTN_ADR_TABLE_PANEL_MEETING_END_TIME = 19
+integer BTN_ADR_TABLE_PANEL_MEETING_TIME_REMAINING = 21
+integer BTN_TABLE_PANEL_EXTEND_MEETING = 20
+
+
+
+/*
+ * --------------------
  * Touch panel button channel/address/level codes
  * --------------------
  */
@@ -403,10 +448,29 @@ char LABELS_PDU_OUTLETS[][20]   =
 char POPUP_NAME_VIDEO_PREVIEW[]                 = 'popup-video-preview'
 char POPUP_NAME_VIDEO_LOADING[]                 = 'popup-video-loading'
 char POPUP_NAME_MESSAGE_QUERY_USER_LYNC_CALL[]  = 'popup-message-query-user-lync-call'
-char PAGE_NAME_SPLASH_SCREEN[]                  = 'page-spash-screen'
+char PAGE_NAME_SPLASH_SCREEN[]                  = 'page-splash-screen'
 char PAGE_NAME_MAIN_USER[]                      = 'page-main-user'
 char POPUP_NAME_SOURCE_SELECTION[]              = 'popup-source-selection-drag-and-drop'
 char POPUP_NAME_NO_SIGNAL_ARE_YOU_SURE[]        = 'popup-no-signal-are-you-sure'
+
+char POPUP_NAME_SOURCE_CONTROL[]                = 'popup-source-control-background'
+
+char POPUP_NAME_CONFIRM_SHUTDOWN[]              = 'popup-confirm-shutdown'
+
+char POPUP_NAME_MEETING_ENDING_WITH_EXTEND_OPTION[]  = 'popup-meeting-ending-extend'
+char POPUP_NAME_MEETING_ENDING_NO_EXTEND_OPTION[]    = 'popup-meeting-ending-no-extend' 
+char POPUP_NAME_MEETING_EXTEND_REQUEST_IN_PROGRESS[] = 'popup-meeting-extend-requesting'
+char POPUP_NAME_MEETING_EXTEND_SUCCESS[]             = 'popup-meeting-extend-success'
+char POPUP_NAME_MEETING_EXTEND_FAILURE[]             = 'popup-meeting-extend-fail'
+
+
+
+char POPUP_NAME_MEETING_INFO_CARD[]            = 'rmsMeetingInfoCard'
+char POPUP_NAME_SELECT_DURATION_MEETING_NOW[]  = 'bookNowSelectDuration'
+char POPUP_NAME_SELECT_DURATION_MEETING_NEXT[] = 'bookNextSelectDuration'
+
+char PAGE_NAME_ROOM_STATUS[] = 'roomStatus'
+char PAGE_NAME_RMS_SCHEDULING_CALENDAR[] = 'rmsSchedulingPage'
 
 char POPUP_NAME_DRAGGABLE_SOURCES[][30] = 
 {
