@@ -148,6 +148,15 @@ integer BTN_ENZO_PAGE_DOWN = 31
 integer BTN_ENZO_PREVIOUS = 32
 integer BTN_ENZO_NEXT = 33
 
+// Apple TV Control
+integer BTN_APPLE_TV_PLAY_PAUSE = 1
+integer BTN_APPLE_TV_MENU       = 2
+integer BTN_APPLE_TV_SELECT     = 3
+integer BTN_APPLE_TV_UP         = 4
+integer BTN_APPLE_TV_DOWN       = 5
+integer BTN_APPLE_TV_LEFT       = 6
+integer BTN_APPLE_TV_RIGHT      = 7
+
 // Video Control
 INTEGER BTN_ADR_VIDEO_PREVIEW_VIDEO = 200
 INTEGER BTN_ADR_VIDEO_MONITOR_LEFT_PREVIEW_SNAPSHOT = 201
@@ -382,6 +391,24 @@ integer REL_DVX_BLOCKOUTS_WALL_WINDOW_STOP      = 3
 integer REL_DVX_SHADES_WALL_WINDOW_STOP         = 4
 
 
+
+/*
+ * --------------------
+ * IR channel codes
+ * --------------------
+ */
+
+
+
+integer IR_APPLE_TV_PLAY_PAUSE = 1
+integer IR_APPLE_TV_SELECT     = 21
+integer IR_APPLE_TV_UP         = 43
+integer IR_APPLE_TV_DOWN       = 44
+integer IR_APPLE_TV_RIGHT      = 45
+integer IR_APPLE_TV_LEFT       = 46
+integer IR_APPLE_TV_MENU       = 47
+
+
 /*
  * --------------------
  * IO channel codes
@@ -501,6 +528,7 @@ char POPUP_NAME_SOURCE_CONTROL_BACKGROUNDS[][50] =
 }
 
 char POPUP_NAME_SOURCE_CONTROL_ENZO[] = 'popup-source-control-enzo'
+char POPUP_NAME_SOURCE_CONTROL_APPLE_TV[] = 'popup-source-control-apple-tv'
 char POPUP_NAME_SOURCE_CONTROL_PC[] = 'popup-source-control-pc'
 char POPUP_NAME_SOURCE_CONTROL_BLURAY_MENU[] = 'popup-source-control-bluray-menu'
 char POPUP_NAME_SOURCE_CONTROL_BLURAY_NAVIGATION[] = 'popup-source-control-bluray-navigation'
