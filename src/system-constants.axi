@@ -554,6 +554,16 @@ char IMAGE_FILE_NAME_NO_VIDEO_ROUTE_ICON[]    = 'icon-novideo.png'
  * --------------------
  */
 
+char SOUND_FILE_NAME_CHIME[] = 'chime.wav'
+
+
+/*
+ * --------------------
+ * Special Users
+ * --------------------
+ */
+
+char USER_NAME_MAINTENANCE[] = 'Maintenance'
 
 
 
