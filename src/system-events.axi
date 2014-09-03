@@ -10,6 +10,7 @@ PROGRAM_NAME='system-events'
 #include 'system-functions'
 #include 'system-library-api'
 #include 'system-library-control'
+#include 'system-rms-api'
 
 #include 'debug'
 #include 'wake-on-lan'
