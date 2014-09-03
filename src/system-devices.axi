@@ -41,10 +41,12 @@ integer DEV_ID_PDU_7                                =  91
 integer DEV_ID_PDU_8                                =  92
 integer DEV_ID_VIRTUAL_DRAG_AND_DROP_TP_TABLE       = 33001
 integer DEV_ID_VIRTUAL_MULTI_PREVIEW                = 33002
+integer DEV_ID_DUET_MODULE_VIRTUAL_LIGHTING         = 41005//33003
+integer DEV_ID_VIRTUAL_SIMULATION                   = 33004
 integer DEV_ID_DUET_MODULE_VIRTUAL_RMS              = 41001
-integer DEV_ID_DUET_MODULE_VIRTUAL_MONITOR_LEFT     = 41002
-integer DEV_ID_DUET_MODULE_VIRTUAL_MONITOR_RIGHT    = 41003
-integer DEV_ID_DUET_MODULE_VIRTUAL_DYNALITE         = 41004
+integer DEV_ID_VIRTUAL_RMS_GUI                      = 41002
+integer DEV_ID_DUET_MODULE_VIRTUAL_MONITOR_LEFT     = 41003
+integer DEV_ID_DUET_MODULE_VIRTUAL_MONITOR_RIGHT    = 41004
 
 /*
  * --------------------
@@ -194,12 +196,13 @@ dvDvxVidIn8     = DEV_ID_DVX_SWITCHER:DVX_PORT_VID_IN_8:SYS_MASTER
 dvDvxVidIn9     = DEV_ID_DVX_SWITCHER:DVX_PORT_VID_IN_9:SYS_MASTER
 dvDvxVidIn10    = DEV_ID_DVX_SWITCHER:DVX_PORT_VID_IN_10:SYS_MASTER
 // Names ports
-dvDvxVidInEnzo  = dvDvxVidIn4
-dvDvxVidInPc    = dvDvxVidIn5
-dvDvxVidInTx1   = dvDvxVidIn7
-dvDvxVidInTx2   = dvDvxVidIn8
-dvDvxVidInTx3   = dvDvxVidIn9
-dvDvxVidInTx4   = dvDvxVidIn10
+dvDvxVidInSignage  = dvDvxVidIn7
+dvDvxVidInEnzo     = dvDvxVidIn5
+dvDvxVidInAppleTv  = dvDvxVidIn6
+dvDvxVidInTx1      = dvDvxVidIn4
+dvDvxVidInTx2      = dvDvxVidIn8
+dvDvxVidInTx3      = dvDvxVidIn9
+dvDvxVidInTx4      = dvDvxVidIn10
 
 // DVX Video Outputs
 dvDvxVidOut1    = DEV_ID_DVX_SWITCHER:DVX_PORT_VID_OUT_1:SYS_MASTER
@@ -207,7 +210,7 @@ dvDvxVidOut2    = DEV_ID_DVX_SWITCHER:DVX_PORT_VID_OUT_2:SYS_MASTER
 dvDvxVidOut3    = DEV_ID_DVX_SWITCHER:DVX_PORT_VID_OUT_3:SYS_MASTER
 dvDvxVidOut4    = DEV_ID_DVX_SWITCHER:DVX_PORT_VID_OUT_4:SYS_MASTER
 // Named ports
-dvDvxVidOutMultiPreview = dvDvxVidOut2
+dvDvxVidOutMultiPreview = dvDvxVidOut4
 dvDvxVidOutMonitorLeft  = dvDvxVidOut1
 dvDvxVidOutMonitorRight = dvDvxVidOut3
 
@@ -227,12 +230,12 @@ dvDvxAudIn12    = DEV_ID_DVX_SWITCHER:DVX_PORT_AUD_IN_12:SYS_MASTER
 dvDvxAudIn13    = DEV_ID_DVX_SWITCHER:DVX_PORT_AUD_IN_13:SYS_MASTER
 dvDvxAudIn14    = DEV_ID_DVX_SWITCHER:DVX_PORT_AUD_IN_14:SYS_MASTER
 // Names ports
-dvDvxAudInEnzo  = dvDvxAudIn4
-dvDvxAudInPc    = dvDvxAudIn5
-dvDvxAudInTx1   = dvDvxAudIn7
-dvDvxAudInTx2   = dvDvxAudIn8
-dvDvxAudInTx3   = dvDvxAudIn9
-dvDvxAudInTx4   = dvDvxAudIn10
+dvDvxAudInEnzo    = dvDvxAudIn5
+dvDvxAudInAppleTv = dvDvxAudIn6
+dvDvxAudInTx1     = dvDvxAudIn7
+dvDvxAudInTx2     = dvDvxAudIn8
+dvDvxAudInTx3     = dvDvxAudIn9
+dvDvxAudInTx4     = dvDvxAudIn10
 
 // DVX Audio Outputs
 dvDvxAudOut1    = DEV_ID_DVX_SWITCHER:DVX_PORT_AUD_OUT_1:SYS_MASTER
@@ -311,6 +314,9 @@ vdvDragAndDropTpTable = DEV_ID_VIRTUAL_DRAG_AND_DROP_TP_TABLE:PORT_VIRTUAL_MAIN:
 // Multi-Preview
 vdvMultiPreview = DEV_ID_VIRTUAL_MULTI_PREVIEW:PORT_VIRTUAL_MAIN:SYS_MASTER
 
+
+// Simulation Virtual Device
+vdvSimulation = DEV_ID_VIRTUAL_SIMULATION:PORT_VIRTUAL_MAIN:SYS_MASTER
 
  
 

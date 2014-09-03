@@ -109,23 +109,23 @@
        <!ELEMENT Notes (#PCDATA)>
 ]>
 
-<Workspace CurrentVersion="4.0"><Identifier>amx-au-gc-boardroom</Identifier>
+<Workspace CurrentVersion="4.0"><Identifier>intgegrate-2014-boardroom</Identifier>
 <CreateVersion>3.3</CreateVersion>
 <PJS_File></PJS_File>
 <PJS_ConvertDate></PJS_ConvertDate>
 <PJS_CreateDate></PJS_CreateDate>
 <Comments></Comments>
-<Project><Identifier>amx-au-gc-boardroom</Identifier>
+<Project><Identifier>intgegrate-2014-boardroom</Identifier>
 <Designer></Designer>
 <DealerID></DealerID>
 <SalesOrder></SalesOrder>
 <PurchaseOrder></PurchaseOrder>
 <Comments></Comments>
-<System IsActive="true" Platform="Netlinx" Transport="TCPIP" TransportEx="TCPIP"><Identifier>amx-au-gc-boardroom</Identifier>
+<System IsActive="true" Platform="Netlinx" Transport="TCPIP" TransportEx="TCPIP"><Identifier>intgegrate-2014-boardroom</Identifier>
 <SysID>0</SysID>
 <TransTCPIP>192.168.7.201:1319:1:AMX AU - GC Office - Boardroom DVX::</TransTCPIP>
 <TransSerial>COM4,38400,8,None,1,None</TransSerial>
-<TransTCPIPEx>192.168.7.201|1319|1|AMX AU - GC Office - Boardroom DVX||</TransTCPIPEx>
+<TransTCPIPEx>192.168.251.81|1319|1| ||</TransTCPIPEx>
 <TransSerialEx>COM4|38400|8|None|1|None||</TransSerialEx>
 <TransUSBEx>|||||</TransUSBEx>
 <TransVNMEx>10.0.0.1|1</TransVNMEx>
@@ -139,6 +139,12 @@
 <File CompileType="None" Type="Include"><Identifier>SNAPI</Identifier>
 <FilePathName>C:\Program Files (x86)\Common Files\AMXShare\AXIs\SNAPI.axi</FilePathName>
 <Comments></Comments>
+</File>
+<File CompileType="Netlinx" Type="IR"><Identifier>APPLE,APPLE TV,UNKNOWN,MEDIA STREAMING BOX,1</Identifier>
+<FilePathName>ir\APPLE,APPLE TV,UNKNOWN,MEDIA STREAMING BOX,1.irl</FilePathName>
+<Comments></Comments>
+<DeviceMap DevAddr="Custom [5001:9:1]"><DevName>Custom [5001:9:1]</DevName>
+</DeviceMap>
 </File>
 <File CompileType="None" Type="Include"><Identifier>amx-controlports-api</Identifier>
 <FilePathName>lib\amx-device-library\amx-controlports-api.axi</FilePathName>
@@ -224,12 +230,24 @@
 <FilePathName>lib\amx-rms-sdk\includes\RmsEventListener.axi</FilePathName>
 <Comments></Comments>
 </File>
+<File CompileType="Netlinx" Type="Include"><Identifier>RmsGuiApi</Identifier>
+<FilePathName>lib\amx-rms-sdk\includes\RmsGuiApi.axi</FilePathName>
+<Comments></Comments>
+</File>
 <File CompileType="None" Type="Include"><Identifier>RmsMathUtil</Identifier>
 <FilePathName>lib\amx-rms-sdk\includes\RmsMathUtil.axi</FilePathName>
 <Comments></Comments>
 </File>
 <File CompileType="None" Type="Include"><Identifier>RmsMonitorCommon</Identifier>
 <FilePathName>lib\amx-rms-sdk\includes\RmsMonitorCommon.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="Netlinx" Type="Include"><Identifier>RmsSchedulingApi</Identifier>
+<FilePathName>lib\amx-rms-sdk\includes\RmsSchedulingApi.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="Netlinx" Type="Include"><Identifier>RmsSchedulingEventListener</Identifier>
+<FilePathName>lib\amx-rms-sdk\includes\RmsSchedulingEventListener.axi</FilePathName>
 <Comments></Comments>
 </File>
 <File CompileType="Netlinx" Type="Module"><Identifier>RmsDuetLightSystemMonitor</Identifier>
@@ -288,8 +306,26 @@
 <FilePathName>lib\xtra-pc-control\xtra-pc-control-listener.axi</FilePathName>
 <Comments></Comments>
 </File>
+<File CompileType="Netlinx" Type="Other"><Identifier>notes</Identifier>
+<FilePathName>notes.txt</FilePathName>
+<Comments></Comments>
+<MasterDirectory>\</MasterDirectory>
+</File>
 <File CompileType="None" Type="Include"><Identifier>agent-usb-ptz-web-cam</Identifier>
 <FilePathName>src\agent-usb-ptz-web-cam\agent-usb-ptz-web-cam.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="Netlinx" Type="Other"><Identifier>C-Bus Comm Interface</Identifier>
+<FilePathName>src\cbus-lighting\C-Bus Comm Interface.doc</FilePathName>
+<Comments></Comments>
+<MasterDirectory>\</MasterDirectory>
+</File>
+<File CompileType="Netlinx" Type="Include"><Identifier>cbus-lighting</Identifier>
+<FilePathName>src\cbus-lighting\cbus-lighting.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="Netlinx" Type="DUET"><Identifier>Clipsal_CBus_Comm_dr1_0_0</Identifier>
+<FilePathName>src\cbus-lighting\Clipsal_CBus_Comm_dr1_0_0.jar</FilePathName>
 <Comments></Comments>
 </File>
 <File CompileType="None" Type="Include"><Identifier>debug</Identifier>
@@ -380,6 +416,14 @@
 <FilePathName>src\system-mutual-exclusions.axi</FilePathName>
 <Comments></Comments>
 </File>
+<File CompileType="Netlinx" Type="Include"><Identifier>system-rms-api</Identifier>
+<FilePathName>src\system-rms-api.axi</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="Netlinx" Type="Include"><Identifier>system-rms-listener</Identifier>
+<FilePathName>src\system-rms-listener.axi</FilePathName>
+<Comments></Comments>
+</File>
 <File CompileType="Netlinx" Type="Include"><Identifier>system-start</Identifier>
 <FilePathName>src\system-start.axi</FilePathName>
 <Comments></Comments>
@@ -396,9 +440,17 @@
 <FilePathName>src\wake-on-lan\wake-on-lan.axi</FilePathName>
 <Comments></Comments>
 </File>
+<File CompileType="Netlinx" Type="TP4"><Identifier>boardroomScheduling</Identifier>
+<FilePathName>touch-panels\boardroomScheduling.TP4</FilePathName>
+<Comments></Comments>
+<DeviceMap DevAddr="Custom [10002:1:1]"><DevName>Custom [10002:1:1]</DevName>
+</DeviceMap>
+</File>
 <File CompileType="None" Type="TP4"><Identifier>integrate-2014-boardroom-mxt-1900</Identifier>
 <FilePathName>touch-panels\integrate-2014-boardroom-mxt-1900.TP4</FilePathName>
 <Comments></Comments>
+<DeviceMap DevAddr="Custom [10001:1:0]"><DevName>Custom [10001:1:0]</DevName>
+</DeviceMap>
 </File>
 </System>
 </Project>

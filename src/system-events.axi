@@ -31,6 +31,130 @@ define_event
  * --------------------
  */
 
+
+data_event[vdvRmsGui]
+{
+	online:
+	{
+		RmsSetDefaultEventBookingDuration(bookingTime)
+	}
+}
+
+
+channel_event[vdvRms,0]
+{
+	on:
+	{
+		switch (channel.channel)
+		{
+			case RMS_CHANNEL_CLIENT_ONLINE: // connection to RMS established
+			{
+				RmsBookingActiveRequest (rmsSchedule.locationId)
+				RmsBookingNextActiveRequest (rmsSchedule.locationId)
+				moderoSetPage (dvTpSchedulingMain, pageWelcomePanelRmsConnected)
+				wait 30	// wait 3 seconds (just so we see the "connected" message for more than a split second)
+				{
+					//moderoSetPage (dvTpSchedulingMain, pageWelcomePanelLocked)
+					lockWelcomePanel ()
+				}
+			}
+		}
+	}
+	off:
+	{
+		switch (channel.channel)
+		{
+			case RMS_CHANNEL_CLIENT_ONLINE:	// lost connection to RMS
+			{
+				moderoSetPage (dvTpSchedulingMain, pageWelcomePanelRmsConnecting)
+				moderoDisableAllPopups (dvTpSchedulingMain)
+			}
+		}
+	}
+}
+
+data_event[dvTpTableRmsCustom]
+{
+	online:
+	{
+		if (rmsSchedule.bookingIdCurrentMeeting != '')
+			showCurrentMeetingInfoOnTableSplashScreen ()
+		else if (rmsSchedule.bookingIdNextMeeting != '')
+			showNextMeetingInfoOnTableSplashScreen ()
+		else
+			showNoMeetingsTodayInfoOnTableSplashScreen ()
+	}
+}
+
+data_event[dvTpSchedulingRms]
+{
+	online:
+	{
+		moderoDisableAllPopups (dvTpSchedulingMain)
+		if ([vdvRms,RMS_CHANNEL_CLIENT_ONLINE])
+		{
+			//moderoSetPage (dvTpSchedulingMain, pageWelcomePanelLocked)
+			lockWelcomePanel ()
+			/*if (rmsSchedule.bookingIdCurrentMeeting == '')
+			{
+				moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNow, pageWelcomePanelUnlocked)
+			}
+			else
+				moderoEnablePopupOnPage (dvTpSchedulingMain, popupBookNext, pageWelcomePanelUnlocked)*/
+			
+			if (rmsSchedule.bookingIdCurrentMeeting != '')
+				showCurrentMeetingInfoCardOnWelcomePanel ()
+			else if (rmsSchedule.bookingIdNextMeeting != '')
+				showNextMeetingInfoCardOnWelcomePanel ()
+			else
+				hideMeetingInfoCardOnWelcomePanel()
+		}
+		else
+		{
+			moderoSetPage (dvTpSchedulingMain, pageWelcomePanelRmsConnecting)
+		}
+	}
+}
+
+button_event[dvTpSchedulingRmsCustom, 0]
+{
+	push:
+	{
+		switch (button.input.channel)
+		{
+			case 20:	// meet now
+			{
+				// book a meeting for right now
+				RmsBookingCreate (LDATE,
+				                  TIME,
+				                  bookingTime,
+				                  "adHocBookingSubjectHeader,currentUserSchedulingPanel.name",
+				                  "adHocBookingDescriptionHeader,currentUserSchedulingPanel.name",
+				                  rmsSchedule.locationId)
+				
+				waitingForAdhocBookingResponse = true
+			}
+			
+			case 21:	// meet next
+			{
+				// book the next meeting
+				RmsBookingCreate (LDATE,
+				                  rmsSchedule.currentMeetingEndTime,
+				                  bookingTime,
+				                  "adHocBookingSubjectHeader,currentUserSchedulingPanel.name",
+				                  "adHocBookingDescriptionHeader,currentUserSchedulingPanel.name",
+				                  rmsSchedule.locationId)
+				
+				waitingForAdhocBookingResponse = true
+			}
+		}
+	}
+}
+
+
+
+
+
 data_event[dvDvxMain]
 {
 	online:
@@ -243,6 +367,14 @@ data_event [dvTpTableVideo]
 	}
 }
 
+data_event[dvTpSchedulingMain]
+{
+	online:
+	{
+		moderoEnablePageTracking(dvTpSchedulingMain)
+	}
+}
+
 data_event[dvTpTableMain]
 {
 	online:
@@ -374,43 +506,6 @@ data_event[dvRxMonitorRightVidOut]
  */
 
 
-button_event[dvKeypad1,0]
-{
-	push:
-	{
-		switch (button.input.channel)
-		{
-			case BTN_KP_OFF:         lightsEnablePresetAllOff()
-			case BTN_KP_LIGHTS:      lightsEnablePresetAllOn()
-
-			case BTN_KP_AV_OFF:      shutdownAvSystem ()
-
-			case BTN_KP_WHITEBOARD:  lightsToggle (LIGHT_ADDRESS_DOWN_LIGHTS_WHITEBOARD)
-
-			case BTN_KP_SHADES:
-			{
-				amxRelayPulse (dvRelaysRelBox, REL_SHADES_CORNER_WINDOW_DN)
-				amxRelayPulse (dvRelaysRelBox, REL_SHADES_WALL_WINDOW_DN)
-			}
-			case BTN_KP_BLOCKOUTS:
-			{
-				amxRelayPulse (dvRelaysRelBox, REL_BLOCKOUTS_CORNER_WINDOW_DN)
-				amxRelayPulse (dvRelaysRelBox, REL_BLOCKOUTS_WALL_WINDOW_DN)
-			}
-
-			#warn '@TODO: amx-au-gc-boardroom-main - What do we want to do with these keypad buttons? Anything?'
-			case BTN_KP_WHEEL_ROTATE_LT: {}
-			case BTN_KP_WHEEL_ROTATE_RT: {}
-			case BTN_KP_CURSOR_UP:       {}
-			case BTN_KP_CURSOR_DN:       {}
-			case BTN_KP_CURSOR_LT:       {}
-			case BTN_KP_CURSOR_RT:       {}
-			case BTN_KP_ENTER:           {}
-		}
-	}
-}
-
-
 
 
 button_event[dvTpTableAudio,0]
@@ -456,83 +551,6 @@ button_event[dvTpTableAudio,0]
 	}
 }
 
-/*button_event[dvTpTableVideo,BTNS_VIDEO_MONITOR_LEFT_INPUT_SELECTION]
-{
-	hold[waitTimeVideoPreview]:
-	{
-		loadVideoPreviewWindow (dvDvxVidInPorts[get_last(BTNS_VIDEO_MONITOR_LEFT_INPUT_SELECTION)])
-	}
-	release:
-	{
-		if (!isVideoBeingPreviewed)
-		{
-			necMonitorSetPowerOn (vdvMonitorLeft)
-
-			dvxSwitchVideoOnly (dvDvxMain, dvDvxVidInPorts[get_last(BTNS_VIDEO_MONITOR_LEFT_INPUT_SELECTION)].port, dvDvxVidOutMonitorLeft.port)
-
-			if (dvDvxVidInPorts[get_last(BTNS_VIDEO_MONITOR_LEFT_INPUT_SELECTION)] == dvDvxVidInPc)
-			{
-				wakeOnLan (MAC_ADDRESS_PC)
-			}
-
-			if ( (selectedAudioInput == DVX_PORT_AUD_IN_NONE) or
-			     ((audioFollowingVideoOutput == dvDvxVidOutMonitorRight.port) and (signalStatusDvxInputMonitorRight != DVX_SIGNAL_STATUS_VALID_SIGNAL))  )
-			{
-				audioFollowingVideoOutput = dvDvxVidOutMonitorLeft.port
-			}
-
-			if (audioFollowingVideoOutput == dvDvxVidOutMonitorLeft.port)
-			{
-				dvxSwitchAudioOnly (dvDvxMain, dvDvxVidInPorts[get_last(BTNS_VIDEO_MONITOR_LEFT_INPUT_SELECTION)].port, dvDvxAudOutSpeakers.port)
-			}
-
-			// set flag to indicate that system is in use
-			isSystemAvInUse = TRUE
-		}
-
-		// turn off the video being previewed flag
-		//isVideoBeingPreviewed = FALSE	// moved to data_event to capture video preview popup hiding
-	}
-}*/
-
-/*button_event[dvTpTableVideo,BTNS_VIDEO_MONITOR_RIGHT_INPUT_SELECTION]
-{
-	hold[waitTimeVideoPreview]:
-	{
-		loadVideoPreviewWindow (dvDvxVidInPorts[get_last(BTNS_VIDEO_MONITOR_RIGHT_INPUT_SELECTION)])
-	}
-	release:
-	{
-		if (!isVideoBeingPreviewed)
-		{
-			necMonitorSetPowerOn (vdvMonitorRight)
-
-			dvxSwitchVideoOnly (dvDvxMain, dvDvxVidInPorts[get_last(BTNS_VIDEO_MONITOR_RIGHT_INPUT_SELECTION)].port, dvDvxVidOutMonitorRight.port)
-
-			if (dvDvxVidInPorts[get_last(BTNS_VIDEO_MONITOR_RIGHT_INPUT_SELECTION)] == dvDvxVidInPc)
-			{
-				wakeOnLan (MAC_ADDRESS_PC)
-			}
-
-			if ( (selectedAudioInput == DVX_PORT_AUD_IN_NONE) or
-			     ((audioFollowingVideoOutput == dvDvxVidOutMonitorLeft.port) and (signalStatusDvxInputMonitorLeft != DVX_SIGNAL_STATUS_VALID_SIGNAL))    )
-			{
-				audioFollowingVideoOutput = dvDvxVidOutMonitorRight.port
-			}
-
-			if (audioFollowingVideoOutput == dvDvxVidOutMonitorRight.port)
-			{
-				dvxSwitchAudioOnly (dvDvxMain, dvDvxVidInPorts[get_last(BTNS_VIDEO_MONITOR_RIGHT_INPUT_SELECTION)].port, dvDvxAudOutSpeakers.port)
-			}
-
-			// set flag to indicate that system is in use
-			isSystemAvInUse = TRUE
-		}
-
-		// turn off the video being previewed flag
-		//isVideoBeingPreviewed = FALSE   // moved to data_event to capture video preview popup hiding
-	}
-}*/
 
 button_event[dvTpTableVideo,0]
 {
@@ -544,49 +562,6 @@ button_event[dvTpTableVideo,0]
 			case BTN_VIDEO_MONITOR_LEFT_ON:      necMonitorSetPowerOn (vdvMonitorLeft)
 			case BTN_VIDEO_MONITOR_RIGHT_OFF:    necMonitorSetPowerOff (vdvMonitorRight)
 			case BTN_VIDEO_MONITOR_RIGHT_ON:     necMonitorSetPowerOn (vdvMonitorRight)
-
-			case BTN_VIDEO_QUERY_LYNC_CALL_NO:   {}  // ignore
-			case BTN_VIDEO_QUERY_LYNC_CALL_YES:
-			{
-				lightsEnablePresetVc ()
-				amxRelayPulse (dvRelaysRelBox, REL_BLOCKOUTS_CORNER_WINDOW_DN)
-				amxRelayPulse (dvRelaysRelBox, REL_BLOCKOUTS_WALL_WINDOW_DN)
-				dvxSetAudioOutputVolume (dvDvxAudOutSpeakers, volumeDefault)
-			}
-
-			case BTN_VIDEO_LYNC_MONITOR_LEFT:
-			{
-				min_to [button.input]   // feedback for the button
-				recallCameraPreset (CAMERA_PRESET_1)
-				wakeOnLan (MAC_ADDRESS_PC)
-				dvxSwitchVideoOnly (dvDvxMain, dvDvxVidInPc.port, dvDvxVidOutMonitorLeft.port)
-				dvxSwitchAudioOnly (dvDvxMain, dvDvxVidInPc.port, dvDvxAudOutSpeakers.port)
-				audioFollowingVideoOutput = dvDvxVidOutMonitorLeft.port
-				lightsEnablePresetVc ()
-				amxRelayPulse (dvRelaysRelBox, REL_BLOCKOUTS_CORNER_WINDOW_DN)
-				amxRelayPulse (dvRelaysRelBox, REL_BLOCKOUTS_WALL_WINDOW_DN)
-				dvxSetAudioOutputVolume (dvDvxAudOutSpeakers, volumeDefault)
-				necMonitorSetPowerOn (vdvMonitorLeft)
-				// set flag to indicate that system is in use
-				isSystemAvInUse = TRUE
-			}
-
-			case BTN_VIDEO_LYNC_MONITOR_RIGHT:
-			{
-				min_to [button.input]   // feedback for the button
-				recallCameraPreset (CAMERA_PRESET_2)
-				wakeOnLan (MAC_ADDRESS_PC)
-				dvxSwitchVideoOnly (dvDvxMain, dvDvxVidInPc.port, dvDvxVidOutMonitorRight.port)
-				dvxSwitchAudioOnly (dvDvxMain, dvDvxVidInPc.port, dvDvxAudOutSpeakers.port)
-				audioFollowingVideoOutput = dvDvxVidOutMonitorRight.port
-				lightsEnablePresetVc ()
-				amxRelayPulse (dvRelaysRelBox, REL_BLOCKOUTS_CORNER_WINDOW_DN)
-				amxRelayPulse (dvRelaysRelBox, REL_BLOCKOUTS_WALL_WINDOW_DN)
-				dvxSetAudioOutputVolume (dvDvxAudOutSpeakers, volumeDefault)
-				necMonitorSetPowerOn (vdvMonitorRight)
-				// set flag to indicate that system is in use
-				isSystemAvInUse = TRUE
-			}
 			
 			case BTN_USER_ACKNOWLEDGE_SEND_INPUT_NO_SIGNAL_TO_MONITOR_NO:
 			{
@@ -617,20 +592,20 @@ button_event[dvTpTableLighting,0]
 			case BTN_LIGHTING_PRESET_ALL_DIM:    lightsEnablePresetAllDim()
 			case BTN_LIGHTING_PRESET_VC_MODE:    lightsEnablePresetVc()
 
-			case BTN_LIGHTING_AREA_WHITEBOARD_OFF:   lightsOff (LIGHT_ADDRESS_DOWN_LIGHTS_WHITEBOARD)
-			case BTN_LIGHTING_AREA_WHITEBOARD_ON:    lightsOn (LIGHT_ADDRESS_DOWN_LIGHTS_WHITEBOARD)
+			//case BTN_LIGHTING_AREA_WHITEBOARD_OFF:   lightsOff (LIGHT_ADDRESS_DOWN_LIGHTS_WHITEBOARD)
+			//case BTN_LIGHTING_AREA_WHITEBOARD_ON:    lightsOn (LIGHT_ADDRESS_DOWN_LIGHTS_WHITEBOARD)
 
-			case BTN_LIGHTING_AREA_FRONT_UP:             lightsEnableRampUp (LIGHT_ADDRESS_DOWN_LIGHTS_FRONT_WALL)
-			case BTN_LIGHTING_AREA_FRONT_DN:             lightsEnableRampDown (LIGHT_ADDRESS_DOWN_LIGHTS_FRONT_WALL)
-			case BTN_LIGHTING_AREA_SIDE_AND_BACK_UP:     lightsEnableRampUp (LIGHT_ADDRESS_DOWN_LIGHTS_SIDE_AND_BACK_WALLS)
-			case BTN_LIGHTING_AREA_SIDE_AND_BACK_DN:     lightsEnableRampDown (LIGHT_ADDRESS_DOWN_LIGHTS_SIDE_AND_BACK_WALLS)
-			case BTN_LIGHTING_AREA_TABLE_UP:             lightsEnableRampUp (LIGHT_ADDRESS_DOWN_LIGHTS_DESK)
-			case BTN_LIGHTING_AREA_TABLE_DN:             lightsEnableRampDown (LIGHT_ADDRESS_DOWN_LIGHTS_DESK)
+			//case BTN_LIGHTING_AREA_FRONT_UP:             lightsEnableRampUp (LIGHT_ADDRESS_DOWN_LIGHTS_FRONT_WALL)
+			//case BTN_LIGHTING_AREA_FRONT_DN:             lightsEnableRampDown (LIGHT_ADDRESS_DOWN_LIGHTS_FRONT_WALL)
+			//case BTN_LIGHTING_AREA_SIDE_AND_BACK_UP:     lightsEnableRampUp (LIGHT_ADDRESS_DOWN_LIGHTS_SIDE_AND_BACK_WALLS)
+			//case BTN_LIGHTING_AREA_SIDE_AND_BACK_DN:     lightsEnableRampDown (LIGHT_ADDRESS_DOWN_LIGHTS_SIDE_AND_BACK_WALLS)
+			//case BTN_LIGHTING_AREA_TABLE_UP:             lightsEnableRampUp (LIGHT_ADDRESS_DOWN_LIGHTS_DESK)
+			//case BTN_LIGHTING_AREA_TABLE_DN:             lightsEnableRampDown (LIGHT_ADDRESS_DOWN_LIGHTS_DESK)
 		}
 	}
 	release:
 	{
-		switch (button.input.channel)
+		/*switch (button.input.channel)
 		{
 			case BTN_LIGHTING_AREA_FRONT_UP:             lightsDisableRamp (LIGHT_ADDRESS_DOWN_LIGHTS_FRONT_WALL)
 			case BTN_LIGHTING_AREA_FRONT_DN:             lightsDisableRamp (LIGHT_ADDRESS_DOWN_LIGHTS_FRONT_WALL)
@@ -638,36 +613,10 @@ button_event[dvTpTableLighting,0]
 			case BTN_LIGHTING_AREA_SIDE_AND_BACK_DN:     lightsDisableRamp (LIGHT_ADDRESS_DOWN_LIGHTS_SIDE_AND_BACK_WALLS)
 			case BTN_LIGHTING_AREA_TABLE_UP:             lightsDisableRamp (LIGHT_ADDRESS_DOWN_LIGHTS_DESK)
 			case BTN_LIGHTING_AREA_TABLE_DN:             lightsDisableRamp (LIGHT_ADDRESS_DOWN_LIGHTS_DESK)
-		}
+		}*/
 	}
 }
 
-button_event[dvTpTableBlinds,0]
-{
-	push:
-	{
-		min_to [button.input]
-
-		switch (button.input.channel)
-		{
-			case BTN_BLIND_1_UP:     amxRelayPulse (dvRelaysRelBox, REL_BLOCKOUTS_CORNER_WINDOW_UP)
-			case BTN_BLIND_1_DOWN:   amxRelayPulse (dvRelaysRelBox, REL_BLOCKOUTS_CORNER_WINDOW_DN)
-			case BTN_BLIND_1_STOP:   amxRelayPulse (dvRelaysDvx, REL_DVX_BLOCKOUTS_CORNER_WINDOW_STOP)
-
-			case BTN_BLIND_2_UP:     amxRelayPulse (dvRelaysRelBox, REL_BLOCKOUTS_WALL_WINDOW_UP)
-			case BTN_BLIND_2_DOWN:   amxRelayPulse (dvRelaysRelBox, REL_BLOCKOUTS_WALL_WINDOW_DN)
-			case BTN_BLIND_2_STOP:   amxRelayPulse (dvRelaysDvx, REL_DVX_BLOCKOUTS_WALL_WINDOW_STOP)
-
-			case BTN_SHADE_1_UP:     amxRelayPulse (dvRelaysRelBox, REL_SHADES_CORNER_WINDOW_UP)
-			case BTN_SHADE_1_DOWN:   amxRelayPulse (dvRelaysRelBox, REL_SHADES_CORNER_WINDOW_DN)
-			case BTN_SHADE_1_STOP:   amxRelayPulse (dvRelaysDvx, REL_DVX_SHADES_CORNER_WINDOW_STOP)
-
-			case BTN_SHADE_2_UP:     amxRelayPulse (dvRelaysRelBox, REL_SHADES_WALL_WINDOW_UP)
-			case BTN_SHADE_2_DOWN:   amxRelayPulse (dvRelaysRelBox, REL_SHADES_WALL_WINDOW_DN)
-			case BTN_SHADE_2_STOP:   amxRelayPulse (dvRelaysDvx, REL_DVX_SHADES_WALL_WINDOW_STOP)
-		}
-	}
-}
 
 button_event[dvTpTablePower,0]
 {
@@ -734,52 +683,6 @@ button_event[dvTpTableEnzo,0]
 	}
 }
 
-button_event[dvTpTableCamera,0]
-{
-	push:
-	{
-		min_to [button.input]
-
-		switch (button.input.channel)
-		{
-			case BTN_CAMERA_FOCUS_NEAR:  agentUsbPtzWebCamFocusNearStandardSpeed (dvPtzCam)
-			case BTN_CAMERA_FOCUS_FAR:   agentUsbPtzWebCamFocusFarStandardSpeed (dvPtzCam)
-			case BTN_CAMERA_ZOOM_IN:     agentUsbPtzWebCamZoomInStandardSpeed (dvPtzCam)
-			case BTN_CAMERA_ZOOM_OUT:    agentUsbPtzWebCamZoomOutStandardSpeed (dvPtzCam)
-			case BTN_CAMERA_PAN_LEFT:    agentUsbPtzWebCamPanLeft (dvPtzCam, panSpeed)
-			case BTN_CAMERA_PAN_RIGHT:   agentUsbPtzWebCamPanRight (dvPtzCam, panSpeed)
-			case BTN_CAMERA_TILT_DOWN:   agentUsbPtzWebCamTiltDown (dvPtzCam, tiltSpeed)
-			case BTN_CAMERA_TILT_UP:     agentUsbPtzWebCamTiltUp (dvPtzCam, tiltSpeed)
-
-			case BTN_CAMERA_PRESET_1:
-			{
-				recallCameraPreset (CAMERA_PRESET_1)
-			}
-			case BTN_CAMERA_PRESET_2:
-			{
-				recallCameraPreset (CAMERA_PRESET_2)
-			}
-			case BTN_CAMERA_PRESET_3:
-			{
-				recallCameraPreset (CAMERA_PRESET_3)
-			}
-		}
-	}
-	release:
-	{
-		switch (button.input.channel)
-		{
-			case BTN_CAMERA_FOCUS_NEAR:  agentUsbPtzWebCamFocusOff (dvPtzCam)
-			case BTN_CAMERA_FOCUS_FAR:   agentUsbPtzWebCamFocusOff (dvPtzCam)
-			case BTN_CAMERA_ZOOM_IN:     agentUsbPtzWebCamZoomOff (dvPtzCam)
-			case BTN_CAMERA_ZOOM_OUT:    agentUsbPtzWebCamZoomOff (dvPtzCam)
-			case BTN_CAMERA_PAN_LEFT:    agentUsbPtzWebCamPanOff (dvPtzCam)
-			case BTN_CAMERA_PAN_RIGHT:   agentUsbPtzWebCamPanOff (dvPtzCam)
-			case BTN_CAMERA_TILT_DOWN:   agentUsbPtzWebCamTiltOff (dvPtzCam)
-			case BTN_CAMERA_TILT_UP:     agentUsbPtzWebCamTiltOff (dvPtzCam)
-		}
-	}
-}
 
 button_event[dvTpTableDxlink,0]
 {
@@ -949,6 +852,7 @@ button_event[dvTpTableMain, 0]
 			case BTN_MAIN_SHUT_DOWN:
 			{
 				shutdownAvSystem ()
+				userShutdown ()
 			}
 
 			case BTN_MAIN_SPLASH_SCREEN:
@@ -987,6 +891,34 @@ button_event [dvTpTableDebug, 3]	// select right monitor
     }
 }
 
+data_event[dvIrAppleTv]
+{
+	online:
+	{	
+		// Apple TV IR codes are fast and repeating.
+		// Need to limit the amount of time we emit the IR for in order to avoid double-pulses
+		amxIrSetOnTime (dvIrAppleTv, 2)
+		amxIrSetOffTime (dvIrAppleTv, 5)
+	}
+}
+
+button_event [dvTpTableAppleTv,0]
+{
+	push:
+	{
+		switch (button.input.channel)
+		{
+			case BTN_APPLE_TV_PLAY_PAUSE: amxIrStackPulse (dvIrAppleTv,IR_APPLE_TV_PLAY_PAUSE)
+			case BTN_APPLE_TV_MENU:       amxIrStackPulse (dvIrAppleTv,IR_APPLE_TV_MENU)
+			case BTN_APPLE_TV_SELECT:     amxIrStackPulse (dvIrAppleTv,IR_APPLE_TV_SELECT)
+			case BTN_APPLE_TV_UP:         amxIrStackPulse (dvIrAppleTv,IR_APPLE_TV_UP)
+			case BTN_APPLE_TV_DOWN:       amxIrStackPulse (dvIrAppleTv,IR_APPLE_TV_DOWN)
+			case BTN_APPLE_TV_LEFT:       amxIrStackPulse (dvIrAppleTv,IR_APPLE_TV_LEFT)
+			case BTN_APPLE_TV_RIGHT:      amxIrStackPulse (dvIrAppleTv,IR_APPLE_TV_RIGHT)
+		}
+	}
+}
+
 
 /*
  * --------------------
@@ -1001,80 +933,6 @@ level_event[dvTpTableAudio, BTN_LVL_VOLUME_CONTROL]
 
 
 
-/*
- * --------------------
- * Timeline events
- * --------------------
- */
-
-/*timeline_event[TIMELINE_ID_MULTI_PREVIEW_SNAPSHOTS]
-{
-	stack_var integer input
-	local_var integer slotId
-	local_var char dynamicImageName[30]
-
-	input = timeline.sequence
-
-	if (timelineTimesMultiPreviewSnapshots[input])
-	{
-		slotId = input
-		dynamicImageName = "'MXA_PREVIEW_',itoa(slotId)"
-
-		// Only take a snapshot if there is a valid signal status on the input
-		if (dvx.videoInputs[slotId].status == DVX_SIGNAL_STATUS_VALID_SIGNAL)
-		{
-			dvxSwitchVideoOnly (dvDvxMain, slotId, dvDvxVidOutMultiPreview.port)
-
-			WAIT waitTimeMplSnapShot 'WAIT_MULTI_PREVIEW_SNAPSHOT'   // wait just over half a second before taking the snapshot....allows the image time to lock on
-			{
-				moderoResourceForceRefreshPrefetchFromCache (dvTpTableVideo, dynamicImageName, MODERO_RESOURCE_NOTIFICATION_OFF)
-				moderoSetButtonBitmapResource (dvTpTableVideo, BTN_ADRS_VIDEO_MONITOR_LEFT_INPUT_SELECTION[slotId],MODERO_BUTTON_STATE_ALL,"'MXA_PREVIEW_',itoa(slotId)")
-				moderoSetButtonBitmapResource (dvTpTableVideo, BTN_ADRS_VIDEO_MONITOR_RIGHT_INPUT_SELECTION[slotId],MODERO_BUTTON_STATE_ALL,"'MXA_PREVIEW_',itoa(slotId)")
-			}
-		}
-	}
-}*/
-
-
-
-/*
- * --------------------
- * Custom events
- * --------------------
- */
-
-
-#warn 'BUG: amx-au-gc-boardroom-main - custom event for streaming status not triggering'
-
-custom_event[dvTpTableMain,0,MODERO_CUSTOM_EVENT_ID_STREAMING_VIDEO]
-custom_event[dvTpTableVideo,0,MODERO_CUSTOM_EVENT_ID_STREAMING_VIDEO]
-custom_event[dvTpTableMain,1,MODERO_CUSTOM_EVENT_ID_STREAMING_VIDEO]
-custom_event[dvTpTableVideo,1,MODERO_CUSTOM_EVENT_ID_STREAMING_VIDEO]
-{
-	debugPrint ("'custom_event[dvTpTableMain,1,MODERO_CUSTOM_EVENT_ID_STREAMING_VIDEO]'")
-	debugPrint ("'custom.device = [',debugDevToString(custom.device),']'")
-	debugPrint ("'custom.id = <>',itoa(custom.id)")
-	debugPrint ("'custom.type = <>',itoa(custom.type)")
-	debugPrint ("'custom.flag = <>',itoa(custom.flag)")
-	debugPrint ("'custom.value1 = <>',itoa(custom.value1)")
-	debugPrint ("'custom.value2 = <>',itoa(custom.value2)")
-	debugPrint ("'custom.value3 = <>',itoa(custom.value3)")
-	debugPrint ("'custom.text = "',custom.text,'"'")
-
-	switch (custom.flag)
-	{
-		case 1:	// start
-		{
-
-		}
-		case 2:	// stop
-		{
-			//startMultiPreviewSnapshots ()
-		}
-	}
-}
-
-
 data_event[dvTpTableMain]
 {
 	string:
@@ -1087,42 +945,193 @@ data_event[dvTpTableMain]
 			startMultiPreviewSnapshots ()
 		}*/
 		
-		if ( (find_string(data.text, '@PPF-popup-source-selection-drag-and-drop',1) == 1) or
-		     (find_string(data.text, 'PPOF-popup-source-selection-drag-and-drop',1) == 1) )
+		if ( (find_string(data.text, '@PPF-',1) == 1) or
+			 (find_string(data.text, 'PPOF-',1) == 1) )
 		{
-			// deactivate the source selection drag areas
-			disableDragItemsAll (vdvDragAndDropTpTable)
-			do_push(dvTpTableDebug,1)
+			remove_string (data.text,"'-'",1)
+			
+			if (find_string(data.text,POPUP_NAME_SOURCE_SELECTION,1) == 1)
+			{
+				// deactivate the source selection drag areas
+				disableDragItemsAll (vdvDragAndDropTpTable)
+				do_push(dvTpTableDebug,1)
+			}
+			else if (find_string(data.text,POPUP_NAME_SOURCE_CONTROL,1) == 1)
+			{
+				// activate the source selection drag areas
+				enableDragItemsAll (vdvDragAndDropTpTable)
+				sendCommand (vdvMultiPreview, 'SNAPSHOTS')
+			}
+			else if ( (find_string(data.text,POPUP_NAME_CONFIRM_SHUTDOWN,1) == 1) or
+			          (find_string(data.text,POPUP_NAME_MEETING_ENDING_WITH_EXTEND_OPTION,1) == 1) or
+			          (find_string(data.text,POPUP_NAME_MEETING_ENDING_NO_EXTEND_OPTION,1) == 1) or
+			          (find_string(data.text,POPUP_NAME_MEETING_EXTEND_REQUEST_IN_PROGRESS,1) == 1) or
+			          (find_string(data.text,POPUP_NAME_MEETING_EXTEND_SUCCESS,1) == 1) or
+			          (find_string(data.text,POPUP_NAME_MEETING_EXTEND_FAILURE,1) == 1) )
+			{
+				// activate the source selection drag areas
+				enableDragItemsAll (vdvDragAndDropTpTable)
+			}
 		}
-		
-		if ( (find_string(data.text, '@PPN-popup-source-selection-drag-and-drop',1) == 1) or
-		     (find_string(data.text, 'PPON-popup-source-selection-drag-and-drop',1) == 1) )
+		else if ( (find_string(data.text, '@PPN-',1) == 1) or
+				  (find_string(data.text, 'PPON-',1) == 1) )
 		{
-			// activate the source selection drag areas
-			enableDragItemsAll (vdvDragAndDropTpTable)
+			remove_string (data.text,"'-'",1)
+			
+			if (find_string(data.text,POPUP_NAME_SOURCE_SELECTION,1) == 1)
+			{
+					// activate the source selection drag areas
+					enableDragItemsAll (vdvDragAndDropTpTable)
+			}
+			else if ( (find_string(data.text,POPUP_NAME_CONFIRM_SHUTDOWN,1) == 1) or
+			          (find_string(data.text,POPUP_NAME_SOURCE_CONTROL,1) == 1) or
+			          (find_string(data.text,POPUP_NAME_MEETING_ENDING_WITH_EXTEND_OPTION,1) == 1) or
+			          (find_string(data.text,POPUP_NAME_MEETING_ENDING_NO_EXTEND_OPTION,1) == 1) or
+			          (find_string(data.text,POPUP_NAME_MEETING_EXTEND_REQUEST_IN_PROGRESS,1) == 1) or
+			          (find_string(data.text,POPUP_NAME_MEETING_EXTEND_SUCCESS,1) == 1) or
+			          (find_string(data.text,POPUP_NAME_MEETING_EXTEND_FAILURE,1) == 1) )
+			{
+				// deactivate the source selection drag areas
+				disableDragItemsAll (vdvDragAndDropTpTable)
+			}
 		}
-		
-		
-		if ( (find_string(data.text, '@PPF-popup-source-control-background',1) == 1) or
-		     (find_string(data.text, 'PPOF-popup-source-control-background',1) == 1) )
-		{
-			// activate the source selection drag areas
-			enableDragItemsAll (vdvDragAndDropTpTable)
-			sendCommand (vdvMultiPreview, 'SNAPSHOTS')
-		}
-		
-		
-		if ( (find_string(data.text, '@PPN-popup-source-control-background',1) == 1) or
-		     (find_string(data.text, 'PPON-popup-source-control-background',1) == 1) )
-		{
-			// deactivate the source selection drag areas
-			disableDragItemsAll (vdvDragAndDropTpTable)
-		}
-		
 	}
 }
 
 
+data_event[dvTpSchedulingMain]
+{
+	string:
+	{
+		if ( (find_string(data.text, '@PPF-',1) == 1) or
+			 (find_string(data.text, 'PPOF-',1) == 1) )
+		{
+			remove_string (data.text,"'-'",1)
+			
+			if ( (find_string(data.text,POPUP_NAME_SELECT_DURATION_MEETING_NOW,1) == 1) or
+				 (find_string(data.text,POPUP_NAME_SELECT_DURATION_MEETING_NEXT,1) == 1) )
+			{
+				schedulingPanelShowingSelectBookingDurationMessage = false
+			}
+		}
+		else if ( (find_string(data.text, '@PPN-',1) == 1) or
+				  (find_string(data.text, 'PPON-',1) == 1) )
+		{
+			remove_string (data.text,"'-'",1)
+			
+			if ( (find_string(data.text,POPUP_NAME_SELECT_DURATION_MEETING_NOW,1) == 1) or
+				 (find_string(data.text,POPUP_NAME_SELECT_DURATION_MEETING_NEXT,1) == 1) )
+			{
+				schedulingPanelShowingSelectBookingDurationMessage = true
+			}
+		}
+	}
+}
+
+
+
+data_event[vdvSimulation]
+{
+	command:
+	{
+		switch (data.text)
+		{
+			case 'MEETING_STARTED':
+			{
+				meetingStarted()
+			}
+			
+			case 'MEETING_ENDED':
+			{
+				meetingEnded()
+			}
+			
+			case 'USER_SHUTDOWN_BEFORE_MEETING_ENDED':
+			{
+			}
+		}
+	}
+}
+
+
+custom_event[dvTpSchedulingMain,1,700]	// NFC tap on scheduling panel
+{
+    stack_var char    cUid[40]
+	
+	// custom.text contains the unique ID from the NFC device
+	cUid = custom.text
+	
+	debugPrint ("'NFC tap on scheduling panel. Tag = [',cUid,']'")
+	
+	nfcTagDetectedWelcomePanel (cUid)
+}
+
+
+custom_event[dvTpTableMain,1,700]	// NFC tap on table panel
+{
+    stack_var char    cUid[40]
+	
+	// custom.text contains the unique ID from the NFC device
+	cUid = custom.text
+	
+	debugPrint ("'NFC tap on table panel. Tag = [',cUid,']'")
+	
+	nfcTagDetectedTablePanel (cUid)
+}
+
+
+button_event[dvTpSchedulingRmsCustom,BTN_SCHEDULING_USER_LOG_OUT]
+{
+	push:
+	{
+		lockWelcomePanel ()
+	}
+}
+
+
+data_event[dvTpSchedulingMain]
+{
+	online:
+	{
+		// track X/Y press/move/release touch coordinates on the scheduling panel
+		// this is just so we can better guage when the user is actually interacting
+		// with the panel. If we rely solely on button events we don't get a true picture
+		// as some buttons on the panel do not have channel codes
+		// not tracking move as this will reduce processing and it's unlikely that the user 
+		// will continue to hold their finger on the screen moving it around for the amount
+		// of time required to detect no user interaction and lock the welcome panel
+		moderoEnableTouchCoordinateTrackingPressRelease (dvTpSchedulingMain)
+	}
+}
+
+
+button_event[dvTpTableRmsCustom,BTN_TABLE_PANEL_EXTEND_MEETING]
+{
+	push:
+	{
+		// request a meeting extension
+		RmsBookingExtend(rmsSchedule.bookingIdCurrentMeeting,
+                         minutesToExtendBooking,
+                         rmsSchedule.locationId)
+		
+		moderoEnablePopupOnPage (dvTpTableMain, POPUP_NAME_MEETING_EXTEND_REQUEST_IN_PROGRESS, PAGE_NAME_MAIN_USER)
+		// deactivate the source selection drag areas
+		disableDragItemsAll (vdvDragAndDropTpTable)
+	}
+}
+
+button_event[dvTpSchedulingRmsCustom,BTN_SCHEDULING_MAKE_RESERVATION]
+{
+	push:
+	{
+		// book a meeting using the RMS Gui
+		sendCommand (vdvRmsGui, "'CREATE.MEETING.REQUEST.SUBJECT-',debugDevToString(dvTpSchedulingMain),',',adHocBookingSubjectHeader,currentUserSchedulingPanel.name")
+		sendCommand (vdvRmsGui, "'CREATE.MEETING.REQUEST.MESSAGE-',debugDevToString(dvTpSchedulingMain),',',adHocBookingDescriptionHeader,currentUserSchedulingPanel.name")
+		
+		//CREATE.MEETING.REQUEST.SUBJECT-10002:1:1,The Subject
+		//CREATE.MEETING.REQUEST.MESSAGE-10002:1:1,The Description
+	}
+}
 
 
 #end_if

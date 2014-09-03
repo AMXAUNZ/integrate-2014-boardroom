@@ -29,7 +29,7 @@ define_variable
  */
 
 // Override the DEV array within modero-listener
-dev dvPanelsCoordinateTracking[] = {dvTpTableMain}
+dev dvPanelsCoordinateTracking[] = {dvTpTableMain, dvTpSchedulingMain}
 
 // Override the DEV array within dvx-listener
 dev dvDvxMainPorts[] = {dvDvxMain}
@@ -59,7 +59,8 @@ dev dvDvxAudOutPorts[] = {dvDvxAudOutSpeakers}
 
 dev dvDvxAudInPorts[] =
 {
-	dvDvxAudInPc,
+	dvDvxAudInEnzo,
+	dvDvxAudInAppleTv,
 	dvDvxAudInTx1,
 	dvDvxAudInTx2,
 	dvDvxAudInTx3,
@@ -269,6 +270,27 @@ char imageFileNameNoVideo[] = 'icon-novideo.png'
 
 /*
  * --------------------
+ * RMS DEV Arrays
+ * --------------------
+ */
+
+
+// RMS Touch Panel Array
+VOLATILE DEV dvRMSTP[] =
+{
+   dvTpSchedulingRms
+}
+
+// RMS Touch Panel Array -
+//  Base Device for System Keyboard handling
+VOLATILE DEV dvRMSTP_Base[] =
+{
+   dvTpSchedulingMain
+}
+
+
+/*
+ * --------------------
  * Variables to keep track of changes in the system
  * --------------------
  */
@@ -290,7 +312,7 @@ persistent integer countTimesPeopleLeftWithoutShuttingDownSystem    = 0
 
 volatile integer userAcknowledgedSelectingInputWithNoSignal = false
 
-_DvxSwitcher dvx
+volatile _DvxSwitcher dvx
 
 persistent integer volumeMax        = 75
 persistent integer volumeDefault    = 30
@@ -398,6 +420,11 @@ persistent integer waitTimeCameraAdjustingToPreset1Zoom     = 10
 persistent integer waitTimeCameraAdjustingToPreset1Focus    = 0
 
 
+persistent integer waitTimeDigitalSignage = 600
+persistent integer waitTimeToQueryDvxVideoOutputTestPattern = 10
+
+persistent integer waitTimeToLockSchedulingPanel = 150
+
 /*
  * --------------------
  * Debugging variables
@@ -405,6 +432,16 @@ persistent integer waitTimeCameraAdjustingToPreset1Focus    = 0
  */
 
 
+
+/*
+ * --------------------
+ * Integrate specific variables
+ * --------------------
+ */
+
+
+
+integer chanPduLightingIntegrate = 1
 
 
 

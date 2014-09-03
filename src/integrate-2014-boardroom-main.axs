@@ -1,5 +1,7 @@
 PROGRAM_NAME='amx-au-gc-boardroom-main'
 
+// IP address of DVX in boardroom demo at Integrate 2014: 192.168.251.81
+
 /*
  * --------------------
  * System defines (always first!)
