@@ -19,19 +19,19 @@ PROGRAM_NAME='system-start'
 define_start
 
 
-
+rmsSchedule.locationId = 64
 
 
 initArea (dropAreasTpTable[dvDvxVidOutMonitorLeft.port], 438, 164, 320, 180)
 initArea (dropAreasTpTable[dvDvxVidOutMonitorRight.port], 1163, 164, 320, 180)
 initArea (dropAreasTpTable[dvDvxVidOutMultiPreview.port], 771, 164, 379, 180)
 
-initArea (dragAreasTpTable[dvDvxVidInEnzo.port], 528, 376, 134, 105)
-initArea (dragAreasTpTable[dvDvxVidInPc.port], 674, 376, 134, 105)
-initArea (dragAreasTpTable[dvDvxVidInTx1.port], 820, 376 ,134, 105)
-initArea (dragAreasTpTable[dvDvxVidInTx2.port], 966, 376, 134, 105)
-initArea (dragAreasTpTable[dvDvxVidInTx3.port], 1112,376, 134, 105)
-initArea (dragAreasTpTable[dvDvxVidInTx4.port], 1258,376, 134, 105)
+initArea (dragAreasTpTable[dvDvxVidInEnzo.port], 658, 376, 134, 105)
+initArea (dragAreasTpTable[dvDvxVidInAppleTv.port], 815, 376, 134, 105)
+//initArea (dragAreasTpTable[dvDvxVidInTx1.port], 820, 376 ,134, 105)
+//initArea (dragAreasTpTable[dvDvxVidInTx2.port], 966, 376, 134, 105)
+initArea (dragAreasTpTable[dvDvxVidInTx3.port], 972,376, 134, 105)
+initArea (dragAreasTpTable[dvDvxVidInTx4.port], 1129,376, 134, 105)
 
 
 {
