@@ -12,6 +12,43 @@ define_device
 dvDebug = 0:1:0
 #end_if
 
+define_variable
+
+#if_not_defined debugEnabled
+volatile integer debugEnabled = false
+#end_if
+
+
+
+/*
+ * --------------------
+ * Function: debugEnable
+ *
+ * Parameters:  none
+ * 
+ * Description: Enables Debug Printing.
+ * --------------------
+ */
+define_function debugEnable ()
+{
+	debugEnabled = true
+}
+
+/*
+ * --------------------
+ * Function: debugDisable
+ *
+ * Parameters:  none
+ * 
+ * Description: Disables Debug Printing.
+ * --------------------
+ */
+define_function debugDisable ()
+{
+	debugEnabled = false
+}
+
+
 /*
  * --------------------
  * Function: debugPrint
@@ -23,6 +60,7 @@ dvDebug = 0:1:0
  */
 define_function debugPrint (char debugString[])
 {
+	if (debugEnabled)
 	sendString (dvDebug, "'DEBUG::',debugString")
 }
 
