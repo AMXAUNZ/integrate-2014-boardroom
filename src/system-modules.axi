@@ -33,4 +33,14 @@ define_module
                                      popupNameVideoPreview,
                                      imageFileNameNoVideo)
 
+
+
+'RmsNetLinxAdapter_dr4_0_0' mdlRMSNetLinx(vdvRMS)
+
+'RmsClientGui_dr4_0_0' mdlRMSGUI(vdvRMSGui,dvRMSTP,dvRMSTP_Base)
+
+'RmsControlSystemMonitor' mdlRmsControlSystemMonitorMod(vdvRMS,dvMaster)
+
+'RmsTouchPanelMonitor' mdlRmsTouchPanelMonitorMod_1(vdvRMS,dvTpSchedulingMain)
+
 #end_if

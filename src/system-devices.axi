@@ -18,6 +18,7 @@ define_constant
 
 integer DEV_ID_MASTER                               = 0
 integer DEV_ID_TOUCH_PANEL_TABLE                    = 10001
+integer DEV_ID_TOUCH_PANEL_SCHEDULING               = 10002
 integer DEV_ID_ENZO                                 = 9001
 integer DEV_ID_TX_1                                 = 7001
 integer DEV_ID_TX_2                                 = 7002
@@ -64,8 +65,11 @@ integer PORT_TP_POWER           = 6
 integer PORT_TP_CAMERA          = 7
 integer PORT_TP_DXLINK          = 8
 integer PORT_TP_DEVICE_INFO     = 9
+integer PORT_TP_RMS             = 9	//
+integer PORT_TP_RMS_CUSTOM      = 10
 integer PORT_TP_OCCUPANCY       = 10
 integer PORT_TP_ENZO            = 11
+integer PORT_TP_APPLE_TV        = 12
 integer PORT_TP_DEBUG           = 100
 
 // DVX Controller Serial Ports
@@ -108,6 +112,9 @@ define_device
 // Master Controller
 dvMaster    = DEV_ID_MASTER:1:SYS_MASTER
 
+// IR ports
+dvIrAppleTv = DEV_ID_DVX_CONTROLLER:PORT_DVX_IR_1:SYS_MASTER
+
 // Keypad
 dvKeypad1   = DEV_ID_KEYPAD_1:PORT_AXLINK:SYS_MASTER
 dvKeypad2   = DEV_ID_KEYPAD_2:PORT_AXLINK:SYS_MASTER
@@ -125,6 +132,12 @@ dvTpTableDeviceInfo = DEV_ID_TOUCH_PANEL_TABLE:PORT_TP_DEVICE_INFO:SYS_MASTER
 dvTpTableOccupancy  = DEV_ID_TOUCH_PANEL_TABLE:PORT_TP_OCCUPANCY:SYS_MASTER
 dvTpTableEnzo       = DEV_ID_TOUCH_PANEL_TABLE:PORT_TP_ENZO:SYS_MASTER
 dvTpTableDebug      = DEV_ID_TOUCH_PANEL_TABLE:PORT_TP_DEBUG:SYS_MASTER
+dvTpTableRmsCustom  = DEV_ID_TOUCH_PANEL_TABLE:PORT_TP_RMS_CUSTOM:SYS_MASTER
+dvTpTableAppleTv    = DEV_ID_TOUCH_PANEL_TABLE:PORT_TP_APPLE_TV:SYS_MASTER
+
+dvTpSchedulingMain = DEV_ID_TOUCH_PANEL_SCHEDULING:PORT_TP_MAIN:SYS_MASTER
+dvTpSchedulingRms = DEV_ID_TOUCH_PANEL_SCHEDULING:PORT_TP_RMS:SYS_MASTER
+dvTpSchedulingRmsCustom = DEV_ID_TOUCH_PANEL_SCHEDULING:PORT_TP_RMS_CUSTOM:SYS_MASTER
 
 // drag and drop elements
 dvTpTableDragAndDrop = DEV_ID_TOUCH_PANEL_TABLE:PORT_TP_VIDEO:SYS_MASTER
@@ -290,6 +303,7 @@ vdvMonitorRight = DEV_ID_DUET_MODULE_VIRTUAL_MONITOR_RIGHT:PORT_VIRTUAL_MAIN:SYS
 
 // RMS
 vdvRms  = DEV_ID_DUET_MODULE_VIRTUAL_RMS:PORT_VIRTUAL_MAIN:SYS_MASTER
+vdvRmsGui  = DEV_ID_VIRTUAL_RMS_GUI:PORT_VIRTUAL_MAIN:SYS_MASTER
 
 // drag and drop virtual device
 vdvDragAndDropTpTable = DEV_ID_VIRTUAL_DRAG_AND_DROP_TP_TABLE:PORT_VIRTUAL_MAIN:SYS_MASTER

@@ -12,6 +12,7 @@ PROGRAM_NAME='system-mainline'
 #include 'system-functions'
 #include 'system-library-api'
 #include 'system-library-control'
+#include 'system-rms-api'
 
 
 /*
@@ -77,7 +78,8 @@ define_program
 [dvTpTablePower,BTN_POWER_TEMPERATURE_SCALE_CELCIUS]    = ![dvPduMain1,PDU_CHANNEL_TEMP_SCALE]
 [dvTpTablePower,BTN_POWER_TEMPERATURE_SCALE_FAHRENHEIT] = [dvPduMain1,PDU_CHANNEL_TEMP_SCALE]
 
-
+// feedback on RMS panel
+[dvTpSchedulingRms,1300] = (meetingInSession or (rmsSchedule.bookingIdCurrentMeeting != ''))
 
 
 

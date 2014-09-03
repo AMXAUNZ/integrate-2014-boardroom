@@ -69,6 +69,9 @@ PROGRAM_NAME='amx-au-gc-boardroom-main'
 #include 'system-library-listener'
 
 
+#include 'system-rms-api'
+
+#include 'system-rms-listener'
 
 
 
