@@ -289,11 +289,11 @@ dvDvxIos    = DEV_ID_DVX_CONTROLLER:PORT_DVX_IOS:SYS_MASTER
 
 
 // Lighting
-dvDynaliteDyNetLightSystem  = DEV_ID_MASTER:2:SYS_MASTER // This device should be used as the physical device by the COMM module
-vdvDynaliteDyNetLightSystem = DEV_ID_DUET_MODULE_VIRTUAL_DYNALITE:PORT_VIRTUAL_MAIN:SYS_MASTER  // The COMM module should use this as its duet device
+dvLight  = DEV_ID_MASTER:3:SYS_MASTER // This device should be used as the physical device by the COMM module
+vdvLight = DEV_ID_DUET_MODULE_VIRTUAL_LIGHTING:PORT_VIRTUAL_MAIN:SYS_MASTER  // The COMM module should use this as its duet device
 
 // IP socket for wake on lan
-dvIpSocketWakeOnLan = DEV_ID_MASTER:3:SYS_MASTER
+dvIpSocketWakeOnLan = DEV_ID_MASTER:4:SYS_MASTER
 
 // Monitors
 dvMonitorLeft   = dvRxMonitorLeftSerial

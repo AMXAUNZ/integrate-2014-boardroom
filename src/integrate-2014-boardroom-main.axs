@@ -40,7 +40,8 @@ PROGRAM_NAME='amx-au-gc-boardroom-main'
 // as they reference constants within this include file
 #include 'agent-usb-ptz-web-cam'	
 // Need to declare the lighting include file after declaring the lighting devices
-#include 'dynalite-lighting'
+//#include 'dynalite-lighting'
+#include 'cbus-lighting'
 // Need to declare the nec monitor include file after declaring the monitor devices
 #include 'nec-monitor'
 // Need to declare the wake-on-lan include file after declaring the wake-on-lan IP socket
