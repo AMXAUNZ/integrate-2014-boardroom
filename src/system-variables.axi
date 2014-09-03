@@ -326,6 +326,54 @@ _area dragAreasTpTable[DVX_MAX_VIDEO_INPUTS]
 
 char draggablePopupsTpTable[DVX_MAX_VIDEO_INPUTS][40]
 
+volatile _rms_schedule rmsSchedule
+
+volatile integer meetingInSession = false
+
+persistent integer bookingTime = 10	// time (in minutes) to book meetings for
+
+volatile integer waitingForAdhocBookingResponse = false
+
+volatile integer schedulingPanelInUse = false
+volatile integer schedulingPanelShowingBookingSucceededMessageWhileInUse = false
+volatile integer schedulingPanelShowingSelectBookingDurationMessage = false
+
+
+volatile integer tablePanelInUse = false
+
+//volatile char cCurrentUserNfcUidSchedulingPanel[30]
+volatile _user currentUserSchedulingPanel
+
+char filePathNfcUserList[50] = 'nfc\users.txt'
+char filePathUserPhotos[50] = 'user-photos\'
+char dynamicResourceUserPhoto[50] = 'user-photo'
+char fileNameNoPhoto[50] = 'no-photo.png'
+
+char soundFileValidId[50] = 'valid-id.wav'
+char soundFileInvalidId[50] = 'invalid-id.wav'
+char soundFileNotifyUserOfMessage[50] = 'chime.wav'
+
+char popupBookNext[50] = 'nfcBookNext'
+char popupBookNow[50] = 'nfcBookNow'
+char popupBookingSuccessful[50] = 'nfcFeedbackSuccess'
+char popupBookingUnsuccessful[50] = 'nfcFeedbackFail'
+char popupRequestingBooking[50] = 'nfcFeedbackRequesting'
+char popupWelcomeUserMessage[50] = 'nfcUserWelcome'
+
+char pageWelcomePanelLocked[50] = 'roomStatus'
+char pageWelcomePanelUnlocked[50] = 'nfcHome'
+char pageWelcomePanelRmsConnecting[50] = 'connecting'
+char pageWelcomePanelRmsConnected[50] = 'connected'
+
+
+char adHocBookingSubjectHeader[50] = 'Ad-hoc booking for '
+char adHocBookingDescriptionHeader[50] = 'This is an ad-hoc booking created by '
+
+integer minutesRemainingToNotifyUserAboutBookingEnd = 3
+integer minutesToExtendBooking = 5
+volatile integer userShutdownSystemToEndMeeting = false
+volatile integer userInformedMeetingEndingSoon = false
+
 /*
  * --------------------
  * Wait times
